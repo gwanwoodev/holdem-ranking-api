@@ -168,9 +168,13 @@ export const createAds = (req, res) => {
 
 /* PUT */
 
-export const updateUser = (req, res) => {
+export const updateUser = async (req, res) => {
     const {idx, rank, name, age, location, records} = req.body;
     const profile = `/${req.file.filename}`;
+
+    const user = await User.findOne({idx: idx});
+    
+    deleteLinkFiles([`/${user.profile}`]);
 
     User.updateOne({idx: idx}, {
         rank,
@@ -185,10 +189,14 @@ export const updateUser = (req, res) => {
     }));
 }
 
-export const updateAds = (req, res) => {
+export const updateAds = async (req, res) => {
     const {name, idx, addr} = req.body;
     const location = req.params.location;
     const profile = `/${req.file.filename}`;
+
+    const previousAds = await Ads.findOne({idx: idx});
+    
+    deleteLinkFiles([previousAds.profile]);
     
     Ads.updateOne({idx: idx}, {
         location,
