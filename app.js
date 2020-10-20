@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import apiRouter from "./routers/apiRouter";
 import { localsMiddleware } from "./middlewares";
 import methodOverride from "method-override";
+import adminRouter from "./routers/adminRouter";
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(localsMiddleware);
 app.use(express.static("public"));
 app.use(methodOverride("_method"));
 app.use("/api", apiRouter);
+app.use("/dash", adminRouter);
 
 export default app;
 
