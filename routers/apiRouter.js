@@ -9,7 +9,9 @@ import {
     deleteAds,
     searchUser,
     getUsers,
-    getUser
+    getUser,
+    getAds,
+    getAd
 } from "../controllers/apiController";
 
 const upload = multer({
@@ -29,6 +31,8 @@ const apiRouter = express.Router();
 apiRouter.get("/search/:name", searchUser);
 apiRouter.get("/users", getUsers);
 apiRouter.get("/user/:idx", getUser);
+apiRouter.get("/ads", getAds);
+apiRouter.get("/ads/:location", getAd);
 
 /* POST */
 apiRouter.post("/user", upload.single("profile"), createUser);

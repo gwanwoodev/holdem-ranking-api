@@ -30,6 +30,21 @@ export const getUser = (req, res) => {
     }));
 }
 
+export const getAds = (req, res) => {
+    Ads.find({}, ((err, ads) => {
+        if(err) return res.status(500).json({status:500, msg: "조회 실패"});
+        res.status(200).json({status:200, msg: "조회 성공", data: ads});
+    }));
+}
+
+export const getAd = (req, res) => {
+    const location = req.params.location;
+    Ads.find({location: location}, ((err, ads) => {
+        if(err) return res.status(500).json({status:500, msg: "조회 실패"});
+        res.status(200).json({status:200, msg: "조회 성공", data: ads});
+    }));
+}
+
 
 /* POST */
 export const createUser = (req, res) => {
