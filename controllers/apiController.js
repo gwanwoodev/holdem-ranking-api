@@ -1,8 +1,20 @@
 import User from "../models/user";
 import Links from "../models/links";
 import Ads from "../models/ads";
+import { deleteLinkFiles } from "./useful";
 
 /* GET */
+
+export const testApi = async (req, res) => {
+    const links = await Links.find({},((err, links) => {
+        return links;
+    }));
+
+    let temp = links.map(item => {
+        return item.imagePath;
+    })
+    res.send(temp);
+}
 export const holdemInit = async (req, res) => {
     let {startAt, endAt} = req.query;
     if(startAt === undefined) startAt = 0;
@@ -100,8 +112,8 @@ export const createUser = (req, res) => {
 }
 
 export const updateBanner = async (req, res) => {
-    const imageTargets = req.body.targets;
-    const imageLocates = req.body.locates;
+    const imageTargets = req.body.targets.filter(item => true);
+    const imageLocates = req.body.locates.filter(item => true);
 
     const paths = req.files.map((file, i) => {
         const f = {
@@ -109,9 +121,14 @@ export const updateBanner = async (req, res) => {
             target: Number(imageTargets[i]),
             locate: imageLocates[i]
         };
-
         return f;
     });
+
+    imageTargets.forEach(async item => {
+        let links = await Links.findOne({imageTarget: item});
+        deleteLinkFiles([links.imagePath]);
+    })
+
 
     paths.forEach(async item => {
         let link = await Links.findOneAndUpdate(

@@ -1,7 +1,9 @@
 import express from "express";
 import path from "path";
 import multer from "multer";
+import btoa from "btoa";
 import {
+    testApi,
     createUser, 
     createAds, 
     updateAds,
@@ -23,7 +25,7 @@ const upload = multer({
             cb(null, "public");
         },
         filename: (req, file, cb) => {
-            cb(null, new Date().valueOf() + path.extname(file.originalname));
+            cb(null, new Date().valueOf() + btoa(file.originalname) + path.extname(file.originalname));
         },
     }),
 });
@@ -38,6 +40,7 @@ apiRouter.get("/ads", getAds);
 apiRouter.get("/ads/:location", getAd);
 apiRouter.get("/links", getLinks);
 apiRouter.get("/init", holdemInit);
+apiRouter.get("/test", testApi);
 
 /* POST */
 apiRouter.post("/user", upload.single("profile"), createUser);
