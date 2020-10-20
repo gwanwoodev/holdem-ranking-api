@@ -45,6 +45,13 @@ export const getAd = (req, res) => {
     }));
 }
 
+export const getLinks = (req, res) => {
+    Links.find({},((err, links) => {
+        if(err) return res.status(500).json({status:500, msg: "조회 실패"});
+        res.status(200).json({status:200, msg: "조회 성공", data: links});
+    }));
+}
+
 
 /* POST */
 export const createUser = (req, res) => {
@@ -66,14 +73,28 @@ export const createUser = (req, res) => {
 
 export const updateBanner = async (req, res) => {
     const imageTargets = req.body.targets;
+    const imageLocates = req.body.locates;
+
     const paths = req.files.map((file, i) => {
-        const currentTarget = imageTargets[i];
-        const key = `imagePath${currentTarget}`;
-        const f = {[key] : `/${file.filename}`};
+        const f = {
+            imagePath : `/${file.filename}`,
+            target: Number(imageTargets[i]),
+            locate: imageLocates[i]
+        };
+
         return f;
     });
 
-    /* TODO */
+    paths.forEach(async item => {
+        let link = await Links.findOneAndUpdate(
+            {imageTarget: item.target}, 
+            {imagePath: item.imagePath, imageLocate: item.locate},
+            {upsert: true}
+        );
+    })
+
+    res.status(200).json({status: 200, msg: "Links 생성 성공"});
+    
 }
 
 export const createAds = (req, res) => {

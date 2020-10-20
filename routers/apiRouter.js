@@ -3,7 +3,6 @@ import path from "path";
 import multer from "multer";
 import {
     createUser, 
-    updateBanner, 
     createAds, 
     updateAds,
     updateUser,
@@ -12,7 +11,9 @@ import {
     getUsers,
     getUser,
     getAds,
-    getAd
+    getAd,
+    updateBanner,
+    getLinks
 } from "../controllers/apiController";
 
 const upload = multer({
@@ -34,6 +35,7 @@ apiRouter.get("/users", getUsers);
 apiRouter.get("/user/:idx", getUser);
 apiRouter.get("/ads", getAds);
 apiRouter.get("/ads/:location", getAd);
+apiRouter.get("/links", getLinks);
 
 /* POST */
 apiRouter.post("/user", upload.single("profile"), createUser);
@@ -41,7 +43,7 @@ apiRouter.post("/links", upload.array("linkbanner", 5), updateBanner);
 apiRouter.post("/ads/:location", upload.single("profile"), createAds);
 
 /* PUT */
-apiRouter.put("/user/:idx", updateUser);
+apiRouter.put("/user", updateUser);
 apiRouter.put("/ads/:location?", upload.single("profile"), updateAds);
 
 /* DELETE */
