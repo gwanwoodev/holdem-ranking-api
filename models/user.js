@@ -13,7 +13,7 @@ const userSchema = new Schema({
     age: Number,
     location: String,
     profile: String,
-    records: [{year: String, rally: String, record: String}],
+    records: [{year: String, rally: String, record: String, money: Number}],
 });
 
 userSchema.plugin(autoIncrement.plugin, {

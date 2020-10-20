@@ -57,7 +57,7 @@ export const createUser = (req, res) => {
         age,
         location,
         profile: filename,
-        records
+        records,
     }, ((err, user) => {
         if(err) return res.status(500).json({status:500, msg: "User 생성 실패"});
         res.status(200).json({status:200, msg: "User 생성 성공"});
@@ -82,7 +82,7 @@ export const createAds = (req, res) => {
     kangwon, chungbuk, chungnam, jeonbuk, jeonnam, gyeongbuk, gyeongnam, jaeju
     */
 
-    const name = req.body.name;
+    const {name, addr} = req.body;
     const location = req.params.location;
     const profile = `/${req.file.filename}`;
 
@@ -91,7 +91,8 @@ export const createAds = (req, res) => {
     Ads.create({
         location,
         profile,
-        name
+        name,
+        addr
     }, ((err, ads) => {
         if(err) return res.status(500).json({status:500, msg: "Ads 생성 실패"});
         res.status(200).json({status:200, msg: "Ads 생성 성공"});
@@ -101,15 +102,33 @@ export const createAds = (req, res) => {
 
 /* PUT */
 
+export const updateUser = (req, res) => {
+    const {idx, rank, name, age, location, records} = req.body;
+    const profile = `/${req.file.filename}`;
+
+    User.updateOne({idx: idx}, {
+        rank,
+        name,
+        age,
+        location,
+        profile,
+        records
+    }, ((err, user) => {
+        if(err) return res.status(500).json({status:500, msg: "User 업데이트 실패"});
+        res.status(200).json({status:200, msg: "User 업데이트 성공"});
+    }));
+}
+
 export const updateAds = (req, res) => {
-    const {name, idx} = req.body;
+    const {name, idx, addr} = req.body;
     const location = req.params.location;
     const profile = `/${req.file.filename}`;
     
     Ads.updateOne({idx: idx}, {
         location,
         profile,
-        name
+        name,
+        addr,
     }, ((err, ads) => {
         if(err) return res.status(500).json({status:500, msg: "Ads 업데이트 실패"});
         res.status(200).json({status:200, msg: "Ads 업데이트 성공"});

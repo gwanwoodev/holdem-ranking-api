@@ -6,6 +6,7 @@ import {
     updateBanner, 
     createAds, 
     updateAds,
+    updateUser,
     deleteAds,
     searchUser,
     getUsers,
@@ -39,9 +40,8 @@ apiRouter.post("/user", upload.single("profile"), createUser);
 apiRouter.post("/links", upload.array("linkbanner", 5), updateBanner);
 apiRouter.post("/ads/:location", upload.single("profile"), createAds);
 
-
-
 /* PUT */
+apiRouter.put("/user/:idx", updateUser);
 apiRouter.put("/ads/:location?", upload.single("profile"), updateAds);
 
 /* DELETE */
