@@ -3,6 +3,34 @@ import Links from "../models/links";
 import Ads from "../models/ads";
 
 /* GET */
+export const holdemInit = async (req, res) => {
+    let {startAt, endAt} = req.query;
+    if(startAt === undefined) startAt = 0;
+    if(endAt === undefined) endAt = 100;
+
+    const links = await Links.find({},((err, links) => {
+        return links;
+    }));
+
+    const users = await User.find({}, ((err,users) => {
+        return users;
+    })).skip(Number(startAt)).limit(Number(endAt));
+
+    const ads = await Ads.find({}, ((err, ads) => {
+        return ads;
+    }));
+
+    res.status(200).json({
+        status: 200,
+        msg: "조회 성공",
+        data: {
+            links,
+            users,
+            ads
+        }
+    });
+}
+
 export const searchUser = (req, res) => {
     const {name} = req.params;
     User.find({name: name}, ((err, users) => {

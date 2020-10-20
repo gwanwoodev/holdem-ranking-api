@@ -13,7 +13,8 @@ import {
     getAds,
     getAd,
     updateBanner,
-    getLinks
+    getLinks,
+    holdemInit
 } from "../controllers/apiController";
 
 const upload = multer({
@@ -36,6 +37,7 @@ apiRouter.get("/user/:idx", getUser);
 apiRouter.get("/ads", getAds);
 apiRouter.get("/ads/:location", getAd);
 apiRouter.get("/links", getLinks);
+apiRouter.get("/init", holdemInit);
 
 /* POST */
 apiRouter.post("/user", upload.single("profile"), createUser);
