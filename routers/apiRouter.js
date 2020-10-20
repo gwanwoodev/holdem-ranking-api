@@ -1,7 +1,16 @@
 import express from "express";
 import path from "path";
 import multer from "multer";
-import {createUser, updateBanner, createAds, updateAds, deleteAds} from "../controllers/apiController";
+import {
+    createUser, 
+    updateBanner, 
+    createAds, 
+    updateAds,
+    deleteAds,
+    searchUser,
+    getUsers,
+    getUser
+} from "../controllers/apiController";
 
 const upload = multer({
     storage: multer.diskStorage({
@@ -17,16 +26,21 @@ const upload = multer({
 const apiRouter = express.Router();
 
 /* GET */
+apiRouter.get("/search/:name", searchUser);
+apiRouter.get("/users", getUsers);
+apiRouter.get("/user/:idx", getUser);
 
 /* POST */
 apiRouter.post("/user", upload.single("profile"), createUser);
 apiRouter.post("/links", upload.array("linkbanner", 5), updateBanner);
 apiRouter.post("/ads/:location", upload.single("profile"), createAds);
-apiRouter.put("/ads/:location?", upload.single("profile"), updateAds);
-apiRouter.delete("/ads/:idx", deleteAds);
+
+
 
 /* PUT */
+apiRouter.put("/ads/:location?", upload.single("profile"), updateAds);
 
 /* DELETE */
+apiRouter.delete("/ads/:idx", deleteAds);
 
 export default apiRouter;

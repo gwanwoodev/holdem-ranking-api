@@ -3,6 +3,33 @@ import Links from "../models/links";
 import Ads from "../models/ads";
 
 /* GET */
+export const searchUser = (req, res) => {
+    const {name} = req.params;
+    User.find({name: name}, ((err, users) => {
+        if(err) return res.status(500).json({status:500, msg: "조회 실패"});
+        res.status(200).json({status:200, msg: "조회 성공", data: users});
+    }));
+}
+
+export const getUsers = (req, res) => {
+    let {startAt, endAt} = req.query;
+    if(startAt === undefined) startAt = 0;
+    if(endAt === undefined) endAt = 100;
+
+    User.find({}, ((err,users) => {
+        if(err) return res.status(500).json({status:500, msg: "조회 실패"});
+        res.status(200).json({status:200, msg: "조회 성공", data: users});
+    })).skip(Number(startAt)).limit(Number(endAt));
+}
+
+export const getUser = (req, res) => {
+    const idx = req.params.idx;
+    User.findOne({idx: idx}, ((err, user) => {
+        if(err) return res.status(500).json({status:500, msg: "조회 실패"});
+        res.status(200).json({status:200, msg: "조회 성공", data: user});
+    }));
+}
+
 
 /* POST */
 export const createUser = (req, res) => {
