@@ -1,26 +1,22 @@
 import mongoose from "mongoose";
+import autoIncrement from "mongoose-auto-increment";
 
 const Schema = mongoose.Schema;
 
-const adsSchema = new Schema({
-    seoul: [{profile: String, name: String, location: String}],
-    busan: [{profile: String, name: String, location: String}],
-    daegu: [{profile: String, name: String, location: String}],
-    incheon: [{profile: String, name: String, location: String}],
-    gwangju: [{profile: String, name: String, location: String}],
-    daejeon: [{profile: String, name: String, location: String}],
-    ulsan: [{profile: String, name: String, location: String}],
-    sejong: [{profile: String, name: String, location: String}],
-    gyeonggi: [{profile: String, name: String, location: String}],
-    kangwon: [{profile: String, name: String, location: String}],
-    chungbuk: [{profile: String, name: String, location: String}],
-    chungnam: [{profile: String, name: String, location: String}],
-    jeonbuk: [{profile: String, name: String, location: String}],
-    jeonnam: [{profile: String, name: String, location: String}],
-    gyeongbuk: [{profile: String, name: String, location: String}],
-    gyeongnam: [{profile: String, name: String, location: String}],
-    jaeju: [{profile: String, name: String, location: String}],
+autoIncrement.initialize(mongoose.connection);
 
+const adsSchema = new Schema({
+    idx: Number,
+    location: String,
+    profile: String,
+    name: String,
+});
+
+adsSchema.plugin(autoIncrement.plugin, {
+    model: "ads",
+    field: "idx",
+    startAt: 1,
+    increment: 1
 });
 
 export default mongoose.model("ads", adsSchema);

@@ -10,4 +10,4 @@ const linksSchema = new Schema({
     imagePath5: String,
 });
 
-export default mongoose.model("links", linkSchema);
+export default mongoose.model("links", linksSchema);
