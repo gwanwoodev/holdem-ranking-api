@@ -6,7 +6,7 @@ import Ads from "../models/ads";
 export const holdemInit = async (req, res) => {
     let {startAt, endAt} = req.query;
     if(startAt === undefined) startAt = 0;
-    if(endAt === undefined) endAt = 100;
+    if(endAt === undefined) endAt = 30;
 
     const links = await Links.find({},((err, links) => {
         return links;
@@ -42,7 +42,7 @@ export const searchUser = (req, res) => {
 export const getUsers = (req, res) => {
     let {startAt, endAt} = req.query;
     if(startAt === undefined) startAt = 0;
-    if(endAt === undefined) endAt = 100;
+    if(endAt === undefined) endAt = 30;
 
     User.find({}, ((err,users) => {
         if(err) return res.status(500).json({status:500, msg: "조회 실패"});
