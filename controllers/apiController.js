@@ -50,13 +50,36 @@ export const createAds = (req, res) => {
         location,
         profile,
         name
-    }, ((err, user) => {
+    }, ((err, ads) => {
         if(err) return res.status(500).json({status:500, msg: "Ads 생성 실패"});
         res.status(200).json({status:200, msg: "Ads 생성 성공"});
     }));
 
 }
 
-/*  PUT */
+/* PUT */
+
+export const updateAds = (req, res) => {
+    const {name, idx} = req.body;
+    const location = req.params.location;
+    const profile = `/${req.file.filename}`;
+    
+    Ads.updateOne({idx: idx}, {
+        location,
+        profile,
+        name
+    }, ((err, ads) => {
+        if(err) return res.status(500).json({status:500, msg: "Ads 업데이트 실패"});
+        res.status(200).json({status:200, msg: "Ads 업데이트 성공"});
+    }));
+}
 
 /* DELETE */
+
+export const deleteAds = (req, res) => {
+    const idx = req.params.idx;
+    Ads.deleteOne({idx: idx}, ((err, ads) => {
+        if(err) return res.status(500).json({status:500, msg: "Ads 삭제 실패"});
+        res.status(200).json({status:200, msg: "Ads 삭제 성공"});
+    }));
+}

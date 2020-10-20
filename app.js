@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import apiRouter from "./routers/apiRouter";
 import { localsMiddleware } from "./middlewares";
+import methodOverride from "method-override";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(morgan("dev"));
 app.use(localsMiddleware);
 app.use(express.static("public"));
+app.use(methodOverride("_method"));
 app.use("/api", apiRouter);
 
 export default app;
