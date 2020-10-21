@@ -138,31 +138,18 @@ export const createUser = (req, res) => {
 }
 
 export const updateBanner = async (req, res) => {
-    const imageTargets = req.body.targets.filter(item => true);
-    const imageLocates = req.body.locates.filter(item => true);
+    const {target, locate} = req.body;
+    const file = req.file;
 
-    const paths = req.files.map((file, i) => {
-        const f = {
-            imagePath : `/${file.filename}`,
-            target: Number(imageTargets[i]),
-            locate: imageLocates[i]
-        };
-        return f;
-    });
+    let prev_links = await Links.findOne({imageTarget: target});
+    if(prev_links) deleteLinkFiles([prev_links.imagePath]);
+    else console.log(prev_links);
 
-    imageTargets.forEach(async item => {
-        let links = await Links.findOne({imageTarget: item});
-        deleteLinkFiles([links.imagePath]);
-    })
-
-
-    paths.forEach(async item => {
-        let link = await Links.findOneAndUpdate(
-            {imageTarget: item.target}, 
-            {imagePath: item.imagePath, imageLocate: item.locate},
-            {upsert: true}
-        );
-    })
+    let links = await Links.findOneAndUpdate(
+        {imageTarget: target}, 
+        {imagePath: `/${file.filename}`, imageLocate: locate},
+        {upsert: true}
+    );
 
     res.status(200).json({status: 200, msg: "Links 생성 성공"});
     

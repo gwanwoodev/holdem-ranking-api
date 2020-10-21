@@ -44,7 +44,7 @@ apiRouter.get("/test", testApi);
 
 /* POST */
 apiRouter.post("/user", upload.single("profile"), createUser);
-apiRouter.post("/links", upload.array("linkbanner", 5), updateBanner);
+apiRouter.post("/links", upload.single("linkbanner"), updateBanner);
 apiRouter.post("/ads/:location", upload.single("profile"), createAds);
 
 /* PUT */
