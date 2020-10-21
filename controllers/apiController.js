@@ -35,6 +35,18 @@ export const holdemInit = async (req, res) => {
         return users;
     })).skip(Number(startAt)).limit(Number(endAt));
 
+    const totalMoney = await User.aggregate([
+        {
+            $unwind: "$records"
+        },
+        {
+            $group: {
+                _id: "$_id",
+                "total_money": {$sum: "$records.money"}
+            }
+        }
+    ]);
+
     const ads = await Ads.find({}, ((err, ads) => {
         return ads;
     }));
@@ -45,7 +57,8 @@ export const holdemInit = async (req, res) => {
         data: {
             links,
             users,
-            ads
+            ads,
+            totalMoney
         }
     });
 }
