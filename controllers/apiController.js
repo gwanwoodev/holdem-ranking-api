@@ -88,9 +88,16 @@ export const getUsers = async (req, res) => {
         }
     ]);
 
-    User.find({}, ((err,users) => {
+
+    User.find({},((err,users) => {
         if(err) return res.status(500).json({status:500, msg: "조회 실패"});
-        res.status(200).json({status:200, msg: "조회 성공", data: users, totalMoney});
+
+        totalMoney.forEach((item, index) => {
+            users[index] = users[index].toObject();
+            users[index].totalMoney = item.total_money;
+        })
+
+        res.status(200).json({status:200, msg: "조회 성공", data: users});
     })).skip(Number(startAt)).limit(Number(endAt));
 }
 
