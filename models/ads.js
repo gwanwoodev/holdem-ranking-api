@@ -10,6 +10,7 @@ const adsSchema = new Schema({
     location: String,
     profile: String,
     name: String,
+    content: String,
     addr: String,
 });
 

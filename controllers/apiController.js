@@ -2,18 +2,25 @@ import User from "../models/user";
 import Links from "../models/links";
 import Ads from "../models/ads";
 import { deleteLinkFiles } from "./useful";
+import user from "../models/user";
 
 /* GET */
 
 export const testApi = async (req, res) => {
-    const links = await Links.find({},((err, links) => {
+    /*const links = await Links.find({},((err, links) => {
         return links;
     }));
 
     let temp = links.map(item => {
         return item.imagePath;
     })
-    res.send(temp);
+    res.send(temp);*/
+
+    const user = await User.find({}, ((err, user) => {
+        return user;
+    })).skip(0).limit(30);
+
+    res.send(user);
 }
 export const holdemInit = async (req, res) => {
     let {startAt, endAt} = req.query;
@@ -51,22 +58,41 @@ export const searchUser = (req, res) => {
     }));
 }
 
-export const getUsers = (req, res) => {
+export const getUsers = async (req, res) => {
     let {startAt, endAt} = req.query;
     if(startAt === undefined) startAt = 0;
     if(endAt === undefined) endAt = 30;
 
+    const totalMoney = await User.aggregate([
+        {
+            $unwind: "$records"
+        },
+        {
+            $group: {
+                _id: "$_id",
+                "total_money": {$sum: "$records.money"}
+            }
+        }
+    ]);
+
     User.find({}, ((err,users) => {
         if(err) return res.status(500).json({status:500, msg: "조회 실패"});
-        res.status(200).json({status:200, msg: "조회 성공", data: users});
+        res.status(200).json({status:200, msg: "조회 성공", data: users, totalMoney});
     })).skip(Number(startAt)).limit(Number(endAt));
 }
 
-export const getUser = (req, res) => {
+export const getUser = async (req, res) => {
     const idx = req.params.idx;
+
+
+
     User.findOne({idx: idx}, ((err, user) => {
         if(err) return res.status(500).json({status:500, msg: "조회 실패"});
-        res.status(200).json({status:200, msg: "조회 성공", data: user});
+        let sum = 0;
+        user.records.forEach(item => {
+            sum = sum + item.money;
+        })
+        res.status(200).json({status:200, msg: "조회 성공", data: user, totalMoney: sum});
     }));
 }
 
@@ -148,7 +174,7 @@ export const createAds = (req, res) => {
     kangwon, chungbuk, chungnam, jeonbuk, jeonnam, gyeongbuk, gyeongnam, jaeju
     */
 
-    const {name, addr} = req.body;
+    const {name, addr, content} = req.body;
     const location = req.params.location;
     const profile = `/${req.file.filename}`;
 
@@ -158,7 +184,8 @@ export const createAds = (req, res) => {
         location,
         profile,
         name,
-        addr
+        addr,
+        content
     }, ((err, ads) => {
         if(err) return res.status(500).json({status:500, msg: "Ads 생성 실패"});
         res.status(200).json({status:200, msg: "Ads 생성 성공"});
@@ -190,7 +217,7 @@ export const updateUser = async (req, res) => {
 }
 
 export const updateAds = async (req, res) => {
-    const {name, idx, addr} = req.body;
+    const {name, idx, addr, content} = req.body;
     const location = req.params.location;
     const profile = `/${req.file.filename}`;
 
@@ -203,6 +230,7 @@ export const updateAds = async (req, res) => {
         profile,
         name,
         addr,
+        content
     }, ((err, ads) => {
         if(err) return res.status(500).json({status:500, msg: "Ads 업데이트 실패"});
         res.status(200).json({status:200, msg: "Ads 업데이트 성공"});
