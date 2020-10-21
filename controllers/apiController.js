@@ -35,17 +35,15 @@ export const holdemInit = async (req, res) => {
         return users;
     })).skip(Number(startAt)).limit(Number(endAt));
 
-    const totalMoney = await User.aggregate([
-        {
-            $unwind: "$records"
-        },
-        {
-            $group: {
-                _id: "$_id",
-                "total_money": {$sum: "$records.money"}
-            }
-        }
-    ]);
+    users.forEach((items, index) => {
+        let sum = 0;
+        items.records.forEach(item => {
+            sum = sum + item.money;
+        })
+        users[index] = users[index].toObject();
+        users[index].totalMoney = sum;
+    });
+
 
     const ads = await Ads.find({}, ((err, ads) => {
         return ads;
@@ -57,8 +55,7 @@ export const holdemInit = async (req, res) => {
         data: {
             links,
             users,
-            ads,
-            totalMoney
+            ads
         }
     });
 }
@@ -76,25 +73,16 @@ export const getUsers = async (req, res) => {
     if(startAt === undefined) startAt = 0;
     if(endAt === undefined) endAt = 30;
 
-    const totalMoney = await User.aggregate([
-        {
-            $unwind: "$records"
-        },
-        {
-            $group: {
-                _id: "$_id",
-                "total_money": {$sum: "$records.money"}
-            }
-        }
-    ]);
-
-
     User.find({},((err,users) => {
         if(err) return res.status(500).json({status:500, msg: "조회 실패"});
 
-        totalMoney.forEach((item, index) => {
+        users.forEach((items, index) => {
+            let sum = 0;
+            items.records.forEach(item => {
+                sum = sum + item.money;
+            })
             users[index] = users[index].toObject();
-            users[index].totalMoney = item.total_money;
+            users[index].totalMoney = sum;
         })
 
         res.status(200).json({status:200, msg: "조회 성공", data: users});
