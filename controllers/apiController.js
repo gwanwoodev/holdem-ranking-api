@@ -127,7 +127,14 @@ export const getAd = (req, res) => {
 export const getLinks = (req, res) => {
     Links.find({},((err, links) => {
         if(err) return res.status(500).json({status:500, msg: "조회 실패"});
-        res.status(200).json({status:200, msg: "조회 성공", data: links});
+        let array = [{}, {}, {}, {}, {}];
+        links.forEach(item => {
+            array[item.imageTarget-1].imagePath = item.imagePath;
+            array[item.imageTarget-1].imageLocate = item.imageLocate;
+            array[item.imageTarget-1].imageTarget = item.imageTarget;
+        });
+
+        res.status(200).json({status:200, msg: "조회 성공", data: links, btyArray: array});
     }));
 }
 

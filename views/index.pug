@@ -63,67 +63,26 @@ head
 
     .content
       .container-fluid
-        h3.nanumsquare.fwb 상단 링크 배너 수정
+        h3.nanumsquare.fwb.mb40 상단 링크 배너 수정
         br
         .row
+        -for(var i=0; i<links.btyArray.length; i++)
           .col-md-2
             .card.card-product
               .card-image(data-header-animation='true')
-                a(href='#pablo')
-                  img.img(src="" + links.data[0].imagePath)
+                a(href='' + links.btyArray[i]['imageLocate'] ? links.btyArray[i]['imageLocate']: "#")
+                  img.img(class="linkbanner" + (i+1) src="" + links.btyArray[i]['imagePath'] ? links.btyArray[i]['imagePath'] : null)
               .card-content
                 .card-actions
                   button.btn.btn-danger.btn-simple.fix-broken-card(type='button')
-                  button.btn.btn-success.btn-simple(type='button' rel='tooltip' data-placement='bottom' title='Edit')
-                    i.material-icons edit
-                
-
-          .col-md-2
-            .card.card-product
-              .card-image(data-header-animation='true')
-                a(href='#pablo')
-                  img.img(src="" + links.data[1].imagePath)
-              .card-content
-                .card-actions
-                  button.btn.btn-danger.btn-simple.fix-broken-card(type='button')
-                  button.btn.btn-success.btn-simple(type='button' rel='tooltip' data-placement='bottom' title='Edit')
+                  button.btn.btn-success.btn-simple(type='button' rel='tooltip' data-placement='bottom' title='Edit' class="target" + (i+1))
                     i.material-icons edit
 
-          .col-md-2
-            .card.card-product
-              .card-image(data-header-animation='true')
-                a(href='#pablo')
-                  img.img(src="" + links.data[2].imagePath)
-              .card-content
-                .card-actions
-                  button.btn.btn-danger.btn-simple.fix-broken-card(type='button')
-                  button.btn.btn-success.btn-simple(type='button' rel='tooltip' data-placement='bottom' title='Edit')
-                    i.material-icons edit
-
-          .col-md-2
-            .card.card-product
-              .card-image(data-header-animation='true')
-                a(href='#pablo')
-                  img.img(src="" + links.data[3].imagePath)
-              .card-content
-                .card-actions
-                  button.btn.btn-danger.btn-simple.fix-broken-card(type='button')
-                  button.btn.btn-success.btn-simple(type='button' rel='tooltip' data-placement='bottom' title='Edit')
-                    i.material-icons edit
-
-          .col-md-2
-            .card.card-product
-              .card-image(data-header-animation='true')
-                a(href='#pablo')
-                  img.img(src="" + links.data[4].imagePath)
-              .card-content
-                .card-actions
-                  button.btn.btn-danger.btn-simple.fix-broken-card(type='button')
-                  button.btn.btn-success.btn-simple(type='button' rel='tooltip' data-placement='bottom' title='Edit')
-                    i.material-icons edit                                                                                
-
-          .col-md-2
-            button.btn.btn-primary.btn-lg 수정하기                                                         
+        input(type="file"  class="file1" style="display: none;")
+        input(type="file"  class="file2" style="display: none;")
+        input(type="file"  class="file3" style="display: none;")
+        input(type="file"  class="file4" style="display: none;")
+        input(type="file"  class="file5" style="display: none;")
 
         .row
           .col-md-12
@@ -245,3 +204,4 @@ script(type='text/javascript').
   demo.initDashboardPageCharts();
   demo.initVectorMap();
   });
+script(src="/assets/js/custom.js")

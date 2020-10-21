@@ -25,7 +25,7 @@ const upload = multer({
             cb(null, "public");
         },
         filename: (req, file, cb) => {
-            cb(null, new Date().valueOf() + btoa(file.originalname) + path.extname(file.originalname));
+            cb(null, new Date().valueOf() + path.extname(file.originalname));
         },
     }),
 });
