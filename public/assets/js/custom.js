@@ -177,4 +177,44 @@ document.addEventListener("DOMContentLoaded", () => {
             body: formData
         });
     }
+
+    /* users */
+    let userAddButton = document.querySelector(".userAddButton");
+    let userTableBody = document.querySelector("tbody");
+    userAddButton.addEventListener("click", (event) => {
+        let tr = document.createElement("tr");
+        let rankTd = document.createElement("td");
+        let flagTd = document.createElement("td");
+        let flagDiv = document.createElement("div");
+        let rankInput = document.createElement("input");
+        let nameTd = document.createElement("td");
+        let nameInput = document.createElement("input");
+
+        let totalMoneyTd = document.createElement("td");
+        let totalMoneyInput = document.createElement("input");
+        let saveTd = document.createElement("td");
+        let saveButton = document.createElement("button");
+
+        flagDiv.classList.add("flag");
+
+        saveButton.classList.add("btn", "btn-success", "btn-sm", "userSaveButton");
+        saveButton.innerText= "저장";
+        flagDiv.appendChild(rankInput);
+        flagTd.appendChild(flagDiv);
+        rankTd.appendChild(flagDiv);
+        nameTd.appendChild(nameInput);
+        totalMoneyTd.appendChild(totalMoneyInput);
+        saveTd.appendChild(saveButton);
+
+        tr.appendChild(flagTd);
+        tr.appendChild(rankTd);
+        tr.appendChild(nameTd);
+        tr.appendChild(totalMoneyTd);
+        tr.appendChild(saveTd);
+
+        userTableBody.appendChild(tr);
+
+
+        
+    });
 });

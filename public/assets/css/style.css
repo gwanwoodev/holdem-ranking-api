@@ -13,3 +13,19 @@
 .mb40 {
   margin-bottom: 40px;
 }
+
+.disNone {
+  display: none;
+}
+
+.disInit {
+  display: initial;
+}
+
+.custom-flex {
+  display: flex;
+}
+
+.ml-auto {
+  margin-left: auto;
+}

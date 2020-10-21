@@ -91,67 +91,26 @@ head
                 i.material-icons &#xE894;
               .card-content
                 h4.card-title.nanumsquare 선수 추가
+                - function numberWithCommas(x) {
+                -   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                - }
+                .row 
+                  .col-md-12.custom-flex
+                    button.btn.btn-primary.btn-sm.ml-auto.userAddButton 추가
                 .row
-                  .col-md-5
+                  .col-md-12
                     .table-responsive.table-sales
                       table.table
-                        tbody
+                        -for(var i=0; i<users.data.length; i++)
                           tr
                             td
                               .flag
-                                img(src='/assets/img/flags/US.png')
-                            td USA
+                                p #{users.data[i].rank}st
+                            td #{users.data[i].name}
+                            td.text-right #{numberWithCommas(users.data[i].totalMoney)} KRW
                             td.text-right
-                              | 2.920
-                            td.text-right
-                              | 53.23%
-                          tr
-                            td
-                              .flag
-                                img(src='/assets/img/flags/DE.png')
-                            td Germany
-                            td.text-right
-                              | 1.300
-                            td.text-right
-                              | 20.43%
-                          tr
-                            td
-                              .flag
-                                img(src='/assets/img/flags/AU.png')
-                            td Australia
-                            td.text-right
-                              | 760
-                            td.text-right
-                              | 10.35%
-                          tr
-                            td
-                              .flag
-                                img(src='/assets/img/flags/GB.png')
-                            td United Kingdom
-                            td.text-right
-                              | 690
-                            td.text-right
-                              | 7.87%
-                          tr
-                            td
-                              .flag
-                                img(src='/assets/img/flags/RO.png')
-                            td Romania
-                            td.text-right
-                              | 600
-                            td.text-right
-                              | 5.94%
-                          tr
-                            td
-                              .flag
-                                img(src='/assets/img/flags/BR.png')
-                            td Brasil
-                            td.text-right
-                              | 550
-                            td.text-right
-                              | 4.34%
-                  .col-md-6.col-md-offset-1
-                    #worldMap.map
+                             button.btn.btn-primary.btn-sm.userUpdateButton(value ="" + users.data[i].idx) 수정
+                             button.btn.btn-primary.btn-sm.userDeleteButton(value ="" + users.data[i].idx) 삭제
 
 
 
