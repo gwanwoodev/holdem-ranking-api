@@ -78,6 +78,15 @@ export const searchUser = (req, res) => {
     }));
 }
 
+export const searchAds = (req, res) => {
+    const {name} = req.params;
+    console.log(name);
+    Ads.find({name: name}, ((err, ads) => {
+        if(err) return res.status(500).json({status:500, msg: "조회 실패"});
+        res.status(200).json({status:200, msg: "조회 성공", data: ads});
+    }));
+}
+
 export const getUsers = async (req, res) => {
     let {startAt, endAt} = req.query;
     if(startAt === undefined) startAt = 0;

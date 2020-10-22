@@ -42,11 +42,11 @@ head
           .clearfix
 
       ul.nav
-        li.active
+        li
           a(href='/dash')
             i.material-icons dashboard
             p  Dashboard
-        li 
+        li.active
           a(href="/dash/ads")
             i.material-icons apps
             p Ads
@@ -68,34 +68,13 @@ head
 
     .content
       .container-fluid
-        h3.nanumsquare.fwb.mb40 상단 링크 배너 수정
-        br
-        .row
-        -for(var i=0; i<links.btyArray.length; i++)
-          .col-md-2
-            .card.card-product
-              .card-image(data-header-animation='true')
-                a(href='' + links.btyArray[i]['imageLocate'] ? links.btyArray[i]['imageLocate']: "#")
-                  img.img(class="linkbanner" + (i+1) src="" + links.btyArray[i]['imagePath'] ? links.btyArray[i]['imagePath'] : null)
-              .card-content
-                .card-actions
-                  button.btn.btn-danger.btn-simple.fix-broken-card(type='button')
-                  button.btn.btn-success.btn-simple(type='button' rel='tooltip' data-placement='bottom' title='Edit' class="target" + (i+1))
-                    i.material-icons edit
-
-        input(type="file"  class="file1" style="display: none;")
-        input(type="file"  class="file2" style="display: none;")
-        input(type="file"  class="file3" style="display: none;")
-        input(type="file"  class="file4" style="display: none;")
-        input(type="file"  class="file5" style="display: none;")
-
         .row
           .col-md-6
             .card
               .card-header.card-header-icon(data-background-color='rose')
                 i.material-icons mail_outline
               .card-content
-                h4.card-title 유저 추가
+                h4.card-title 광고 추가
                 form(method='POST' action='http://localhost:4000/api/user' id="userForm" enctype="multipart/form-data")
                   .form-group.label-floating.is-empty
                     legend Avatar
@@ -155,7 +134,7 @@ head
               .card-header.card-header-icon(data-background-color='rose')
                 i.material-icons mail_outline
               .card-content
-                h4.card-title 유저 수정
+                h4.card-title 광고 수정
                 form(method='POST' action='http://localhost:4000/api/user?_method=PUT' id="userUpdateForm" enctype="multipart/form-data")
                   .form-group.label-floating.is-empty
                     legend Avatar
@@ -201,37 +180,36 @@ head
               .card-header.card-header-icon(data-background-color='green')
                 i.material-icons &#xE894;
               .card-content
-                h4.card-title.nanumsquare 유저
-                - function numberWithCommas(x) {
-                -   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                - }
+                h4.card-title.nanumsquare 광고
                 .row 
                   .col-md-12.custom-flex
                     div.searchBox
-                      input(type="text" class="form-control userSearchInput" placeholder="이름")
-                      button.btn.btn-primary.btn-sm.ml-auto.userSearchButton 검색
+                      input(type="text" class="form-control adsSearchInput" placeholder="이름")
+                      button.btn.btn-primary.btn-sm.ml-auto.adsSearchButton 검색
                 .row
                   .col-md-12
                     .table-responsive.table-sales
                       table.table.customTable
                         thead.text-primary
-                          th 랭킹
+                          th 지역
                           th 이름
-                          th 나이
-                          th 총 누적 상금
+                          th 주소
+                          th 내용
                           th 수정
                           th 삭제
-                        -for(var i=0; i<users.data.length; i++)
-                          tr
-                            td #{users.data[i].rank}st
-                            td #{users.data[i].name}
-                            td #{users.data[i].age}
-                            td #{numberWithCommas(users.data[i].totalMoney)} KRW
-                            td
-                             button.btn.btn-primary.btn-sm.userImportButton(value ="" + users.data[i].idx) 수정
-                            td
-                             button.btn.btn-primary.btn-sm.userDeleteButton(value ="" + users.data[i].idx) 삭제
+                        -for(var i=0; i<ads.data.length; i++)
+                            tr
+                              td #{ads.data[i].location}
+                              td #{ads.data[i].name}
+                              td #{ads.data[i].content}
+                              td #{ads.data[i].addr}
+                              td
+                                button.btn.btn-primary.btn-sm.adsImportButton(value = ""+ ads.data[i].idx) 수정
+                              td
+                                button.btn.btn-primary.btn-sm.adsDeleteButton(value = ""+ads.data[i].idx) 삭제
 
+
+                    
 
 
 // Core JS Files
@@ -283,4 +261,4 @@ script(type='text/javascript').
   demo.initDashboardPageCharts();
   demo.initVectorMap();
   });
-script(src="/assets/js/custom.js")
+script(src="/assets/js/adsCustom.js")

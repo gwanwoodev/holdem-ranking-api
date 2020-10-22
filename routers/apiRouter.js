@@ -1,7 +1,6 @@
 import express from "express";
 import path from "path";
 import multer from "multer";
-import btoa from "btoa";
 import {
     testApi,
     createUser, 
@@ -18,6 +17,7 @@ import {
     getLinks,
     holdemInit,
     deleteUser,
+    searchAds,
 } from "../controllers/apiController";
 
 const upload = multer({
@@ -41,6 +41,7 @@ apiRouter.get("/ads", getAds);
 apiRouter.get("/ads/:location", getAd);
 apiRouter.get("/links", getLinks);
 apiRouter.get("/init", holdemInit);
+apiRouter.get("/search/ads/:name", searchAds);
 apiRouter.get("/test", testApi);
 
 /* POST */
