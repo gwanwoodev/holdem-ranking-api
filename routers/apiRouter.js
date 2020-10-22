@@ -18,6 +18,7 @@ import {
     holdemInit,
     deleteUser,
     searchAds,
+    getAdInfo,
 } from "../controllers/apiController";
 
 const upload = multer({
@@ -43,6 +44,7 @@ apiRouter.get("/links", getLinks);
 apiRouter.get("/init", holdemInit);
 apiRouter.get("/search/ads/:name", searchAds);
 apiRouter.get("/test", testApi);
+apiRouter.get("/ads/ad/:idx", getAdInfo);
 
 /* POST */
 apiRouter.post("/user", upload.single("profile"), createUser);

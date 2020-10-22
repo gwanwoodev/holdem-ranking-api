@@ -138,6 +138,14 @@ export const getAd = (req, res) => {
     }));
 }
 
+export const getAdInfo = (req, res) => {
+    const idx = req.params.idx;
+    Ads.findOne({idx: idx}, ((err, ads) => {
+        if(err) return res.status(500).json({status:500, msg: "조회 실패"});
+        res.status(200).json({status:200, msg: "조회 성공", data: ads});
+    }));
+}
+
 export const getLinks = (req, res) => {
     Links.find({},((err, links) => {
         if(err) return res.status(500).json({status:500, msg: "조회 실패"});
@@ -243,11 +251,16 @@ export const updateUser = async (req, res) => {
 export const updateAds = async (req, res) => {
     const {name, idx, addr, content} = req.body;
     const location = req.params.location;
-    const profile = `/${req.file.filename}`;
+    let profile = "";
 
-    const previousAds = await Ads.findOne({idx: idx});
-    
-    deleteLinkFiles([previousAds.profile]);
+    if(req.file) {
+        profile = `/${req.file.filename}`;
+        const ads = await Ads.findOne({idx: idx});
+        console.log(ads);
+        deleteLinkFiles([`/${ads.profile}`]);
+    }else {
+        profile = req.body.profile;
+    }
     
     Ads.updateOne({idx: idx}, {
         location,
@@ -263,18 +276,21 @@ export const updateAds = async (req, res) => {
 
 /* DELETE */
 
-export const deleteAds = (req, res) => {
+export const deleteAds = async (req, res) => {
     const idx = req.params.idx;
+    const ads = await Ads.findOne({idx: idx});
+    deleteLinkFiles([`/${ads.profile}`]);
     Ads.deleteOne({idx: idx}, ((err, ads) => {
         if(err) return res.status(500).json({status:500, msg: "Ads 삭제 실패"});
         res.status(200).json({status:200, msg: "Ads 삭제 성공"});
     }));
 }
 
-export const deleteUser = (req, res) => {
+export const deleteUser = async (req, res) => {
     const idx = req.params.idx;
+    const user = await User.findOne({idx: idx});
+    deleteLinkFiles([`/${user.profile}`]);
     User.deleteOne({idx: idx}, ((err, user) => {
-        
         if(err) return res.status(500).json({status:500, msg: "User 삭제 실패"});
         res.status(200).json({status:200, msg: "User 삭제 성공"});
     }));

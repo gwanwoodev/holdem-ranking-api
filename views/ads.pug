@@ -75,7 +75,7 @@ head
                 i.material-icons mail_outline
               .card-content
                 h4.card-title 광고 추가
-                form(method='POST' action='http://localhost:4000/api/user' id="userForm" enctype="multipart/form-data")
+                form(method='POST' action='http://localhost:4000/api/ads' id="adsForm" enctype="multipart/form-data")
                   .form-group.label-floating.is-empty
                     legend Avatar
                     .fileinput.fileinput-new.text-center(data-provides='fileinput')
@@ -92,41 +92,38 @@ head
                           i.fa.fa-times
                           |  Remove                
                   .form-group.label-floating.is-empty
-                    label.control-label 이름(EX: 홍길동)
+                    label.control-label 이름(EX: 강원랜드)
                     input.form-control(type='text' name="name")
                     span.material-input
                   .form-group.label-floating.is-empty
-                    label.control-label 대한민국 랭킹 순위(EX: 1)
-                    input.form-control(type='text' name="rank")
+                    select.selectpicker(data-style='select-with-transition' title='지역 선택' data-size='7')
+                        option(disabled='') 지역선택
+                        option(value='seoul') 서울특별시
+                        option(value='busan') 부산광역시
+                        option(value='daegu') 대구광역시
+                        option(value='incheon') 인천광역시
+                        option(value='gwangju') 광주광역시
+                        option(value='daejeon') 대전광역시
+                        option(value='ulsan') 울산광역시
+                        option(value='sejong') 세종특별자치시
+                        option(value='gyeonggi') 경기도
+                        option(value='kangwon') 강원도
+                        option(value='chungbuk') 충청북도
+                        option(value='chungnam') 충청남도
+                        option(value='jeonbuk') 전라북도
+                        option(value='jeonnam') 전라남도
+                        option(value='gyeongbuk') 경상북도
+                        option(value='gyeongnam') 경상남도
+                        option(value='jaeju') 제주도
+
+                  .form-group.label-floating.is-empty
+                    label.control-label 주소(EX: 경기도 안산시 호동로 1길)
+                    input.form-control(type='text' name="addr")
                     span.material-input
                   .form-group.label-floating.is-empty
-                    label.control-label 나이(EX: 20)
-                    input.form-control(type='text' name="age")
+                    label.control-label 내용(EX: 놀고가세요~)
+                    input.form-control(type='text' name="content")
                     span.material-input
-                  .form-group.label-floating.is-empty
-                    label.control-label 지역(EX: 서울 도봉구)
-                    input.form-control(type='text' name="location")
-                    span.material-input
-                  legend 성적 <button class="btn btn-fill btn-rose ml-auto recordButton">추가</button>
-                  .recordWrapper
-                    .form-group.label-floating.is-empty                    
-                      label.control-label 수상연도(EX: 2019)
-                      input.form-control(type='text' name="year")
-                      span.material-input
-                    .form-group.label-floating.is-empty                    
-                      label.control-label 대회이름(EX: 계룡 포커대회)
-                      input.form-control(type='text' name="rally")
-                      span.material-input     
-                    .form-group.label-floating.is-empty                    
-                      label.control-label 순위(EX: 1)
-                      input.form-control(type='text' name="record")
-                      span.material-input      
-                    .form-group.label-floating.is-empty                    
-                      label.control-label 상금(EX: 5000)
-                      input.form-control(type='text' name="money")
-                      span.material-input                                   
-
-
                   button.btn.btn-fill.btn-rose.userAddButton(type='button') SUBMIT
 
           .col-md-6
@@ -135,7 +132,7 @@ head
                 i.material-icons mail_outline
               .card-content
                 h4.card-title 광고 수정
-                form(method='POST' action='http://localhost:4000/api/user?_method=PUT' id="userUpdateForm" enctype="multipart/form-data")
+                form(method='POST' action='http://localhost:4000/api/ads?_method=PUT' id="adsUpdateForm" enctype="multipart/form-data")
                   .form-group.label-floating.is-empty
                     legend Avatar
                     .fileinput.fileinput-new.text-center(data-provides='fileinput')
@@ -152,25 +149,38 @@ head
                           i.fa.fa-times
                           |  Remove                
                   .form-group.label-floating.is-empty
-                    label.control-label 이름(EX: 홍길동)
+                    label.control-label 이름(EX: 강원랜드)
                     input.form-control(type='text' name="name")
                     span.material-input
                   .form-group.label-floating.is-empty
-                    label.control-label 대한민국 랭킹 순위(EX: 1)
-                    input.form-control(type='text' name="rank")
+                    select.selectpicker(data-style='select-with-transition' title='지역 선택' data-size='7' name="location")
+                        option(disabled='') 지역선택
+                        option(value='seoul') 서울특별시
+                        option(value='busan') 부산광역시
+                        option(value='daegu') 대구광역시
+                        option(value='incheon') 인천광역시
+                        option(value='gwangju') 광주광역시
+                        option(value='daejeon') 대전광역시
+                        option(value='ulsan') 울산광역시
+                        option(value='sejong') 세종특별자치시
+                        option(value='gyeonggi') 경기도
+                        option(value='kangwon') 강원도
+                        option(value='chungbuk') 충청북도
+                        option(value='chungnam') 충청남도
+                        option(value='jeonbuk') 전라북도
+                        option(value='jeonnam') 전라남도
+                        option(value='gyeongbuk') 경상북도
+                        option(value='gyeongnam') 경상남도
+                        option(value='jaeju') 제주도
+                  .form-group.label-floating.is-empty
+                    label.control-label 주소(EX: 경기도 안산시 호동로 1길)
+                    input.form-control(type='text' name="addr")
                     span.material-input
                   .form-group.label-floating.is-empty
-                    label.control-label 나이(EX: 20)
-                    input.form-control(type='text' name="age")
+                    label.control-label 내용(EX: 놀고가세요~)
+                    input.form-control(type='text' name="content")
                     span.material-input
-                  .form-group.label-floating.is-empty
-                    label.control-label 지역(EX: 서울 도봉구)
-                    input.form-control(type='text' name="location")
-                    span.material-input
-                  legend 성적 <button class="btn btn-fill btn-rose ml-auto recordButton">추가</button>
-                  .recordWrapper
-
-                  button.btn.btn-fill.btn-rose.userUpdateButton(type='button') SUBMIT
+                  button.btn.btn-fill.btn-rose.adsUpdateButton(type='button') SUBMIT
 
         
 

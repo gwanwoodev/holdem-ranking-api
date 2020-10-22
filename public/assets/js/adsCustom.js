@@ -58,6 +58,13 @@ document.addEventListener("DOMContentLoaded", (evt) => {
             }
         });
 
+        updateButton.addEventListener("click", async function() {
+            let res = await fetch(`http://localhost:4000/api/ads/ad/${this.value}`);
+            let json = await res.json();
+            let data = json.data;
+            importUpdateForms(data.idx, data.name, data.location, data.addr, data.content, data.profile);
+        });
+
         locTd.innerText = location;
         nameTd.innerText = name;
         addrTd.innerText = addr;
@@ -93,4 +100,82 @@ document.addEventListener("DOMContentLoaded", (evt) => {
             body: formData
         })
     }
+
+    let adsImportButtons = Array.from(document.querySelectorAll(".adsImportButton"));
+    for(let i=0; i<adsImportButtons.length; i++) {
+        adsImportButtons[i].addEventListener("click", async function() {
+            let res = await fetch(`http://localhost:4000/api/ads/ad/${this.value}`);
+            let json = await res.json();
+            let data = json.data;
+
+            console.log(data);
+
+            importUpdateForms(data.idx, data.name, data.location, data.addr, data.content, data.profile);
+        })
+    }
+
+    const importUpdateForms = (idx, name, location, addr, content, profile) => {
+        let nameField = document.querySelector("#adsUpdateForm input[name=name]");
+        let locField = document.querySelector("#adsUpdateForm select[name=location]")
+        let addrField = document.querySelector("#adsUpdateForm input[name=addr]");
+        let contentField = document.querySelector("#adsUpdateForm input[name=content]");
+        let imageField = document.querySelector("#adsUpdateForm .updateImageField");
+
+        nameField.parentElement.classList.remove("is-empty");
+        addrField.parentElement.classList.remove("is-empty");
+        contentField.parentElement.classList.remove("is-empty");
+        
+        nameField.value = name;
+        addrField.value = addr;
+        contentField.value = content;
+        locField.setAttribute("title", location);
+        imageField.src = profile;
+
+        document.querySelector(".adsUpdateButton").value = idx;
+        
+    }
+
+    let adsUpdateButton = document.querySelector(".adsUpdateButton");
+    adsUpdateButton.addEventListener("click", async function() {
+        let formData = new FormData();
+        let adsProfile = document.querySelector("#adsUpdateForm input[name=profile]").files[0];
+        let imageField = document.querySelector("#adsUpdateForm .updateImageField").src;
+        let nameField = document.querySelector("#adsUpdateForm input[name=name]").value;
+        let locField = document.querySelector("#adsUpdateForm select[name=location]").value;
+        let addrField = document.querySelector("#adsUpdateForm input[name=addr]").value;
+        let contentField = document.querySelector("#adsUpdateForm input[name=content]").value;
+        let parseImageSrc = imageField.split("http://localhost:4000/")[1];
+
+        if(!nameField || !locField || !addrField || !contentField || !locField) {
+            alert("빈 정보를 입력해주세요.");
+            return;
+        }
+
+        if(!adsProfile) {
+            adsProfile = `/${parseImageSrc}`;
+        }
+
+
+        formData.append("idx", adsUpdateButton.value);
+        formData.append("profile", adsProfile);
+        formData.append("name", nameField);
+        formData.append("addr", addrField);
+        formData.append("content", contentField);
+
+        let response = await fetch(`http://localhost:4000/api/ads/${locField}?_method=PUT`, {
+            method: "POST",
+            body: formData
+        });
+
+        let responseJson = await response.json();
+
+        if(responseJson.status === 200) {
+            alert("광고 업데이트가 완료 되었습니다.");
+            location.href ="/dash/ads";
+        }
+
+        
+
+    });
+
 });
