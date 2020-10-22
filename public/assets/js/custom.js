@@ -258,7 +258,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
 
         updateButton.addEventListener("click", async function() {
-            let res = await fetch(`http://localhost:4000/api/user/${this.value}`);
+            let res = await fetch(`https://gwgod.xyz/api/user/${this.value}`);
             let json = await res.json();
             let data = json.data;
 
@@ -364,7 +364,7 @@ document.addEventListener("DOMContentLoaded", () => {
         formData.append("profile", userProfile);
         formData.append("records", JSON.stringify(userRecords));
 
-        let response = await fetch("http://localhost:4000/api/user", {
+        let response = await fetch("https://gwgod.xyz/api/user", {
             method: "POST",
             body: formData
         });
@@ -382,7 +382,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     for(let i=0; i<userImportButtons.length; i++) {
         userImportButtons[i].addEventListener("click", async function() {
-            let res = await fetch(`http://localhost:4000/api/user/${this.value}`);
+            let res = await fetch(`https://gwgod.xyz/api/user/${this.value}`);
             let json = await res.json();
             let data = json.data;
 
@@ -454,7 +454,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let userAge = document.querySelector("#userUpdateForm input[name=age]").value;
         let userLocation = document.querySelector("#userUpdateForm input[name=location]").value;
         let updateImageField = document.querySelector("#userUpdateForm .updateImageField").src;
-        let parseImageSrc = updateImageField.split("http://localhost:4000/")[1];
+        let parseImageSrc = updateImageField.split("https://gwgod.xyz/")[1];
 
         let years = Array.from(document.querySelectorAll("#userUpdateForm .recordWrapper input[name=year]"));
         let rallys = Array.from(document.querySelectorAll("#userUpdateForm .recordWrapper input[name=rally]"));
@@ -493,7 +493,7 @@ document.addEventListener("DOMContentLoaded", () => {
         formData.append("profile", userProfile);
         formData.append("records", JSON.stringify(userRecords));
 
-        let response = await fetch("http://localhost:4000/api/user?_method=PUT", {
+        let response = await fetch("https://gwgod.xyz/api/user?_method=PUT", {
             method: "POST",
             body: formData
         });
