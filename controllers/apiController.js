@@ -209,11 +209,14 @@ export const createAds = (req, res) => {
 
 export const updateUser = async (req, res) => {
     const {idx, rank, name, age, location, records} = req.body;
-    const profile = `/${req.file.filename}`;
-
-    const user = await User.findOne({idx: idx});
-    
-    deleteLinkFiles([`/${user.profile}`]);
+    let profile = "";
+    if(req.file) {
+        profile = `/${req.file.filename}`;
+        const user = await User.findOne({idx: idx});
+        deleteLinkFiles([`/${user.profile}`]);
+    }else {
+        profile = req.body.profile;
+    }
 
     User.updateOne({idx: idx}, {
         rank,
@@ -221,7 +224,7 @@ export const updateUser = async (req, res) => {
         age,
         location,
         profile,
-        records
+        records: JSON.parse(records)
     }, ((err, user) => {
         if(err) return res.status(500).json({status:500, msg: "User 업데이트 실패"});
         res.status(200).json({status:200, msg: "User 업데이트 성공"});

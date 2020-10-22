@@ -242,7 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let deleteBtnTd = document.createElement("td");
         let deleteButton = document.createElement("button");
 
-        updateButton.classList.add("btn", "btn-primary", "btn-sm", "userUpdateButton");
+        updateButton.classList.add("btn", "btn-primary", "btn-sm", "userImportButton");
         deleteButton.classList.add("btn", "btn-primary", "btn-sm", "userDeleteButton");
 
         updateButton.value = idx;
@@ -362,4 +362,132 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
     });
+
+    let userImportButtons = Array.from(document.querySelectorAll(".userImportButton"));
+
+    for(let i=0; i<userImportButtons.length; i++) {
+        userImportButtons[i].addEventListener("click", async function() {
+            let res = await fetch(`http://localhost:4000/api/user/${this.value}`);
+            let json = await res.json();
+            let data = json.data;
+
+            importUpdateForms(data.idx, data.name, data.rank, data.age, data.location, data.profile, data.records);
+        });
+    }
+
+    const importUpdateForms = (idx, name, rank, age, location, profile, records) => {
+        let nameField = document.querySelector("#userUpdateForm input[name=name]");
+        let rankField = document.querySelector("#userUpdateForm input[name=rank]");
+        let ageField = document.querySelector("#userUpdateForm input[name=age]");
+        let locationField = document.querySelector("#userUpdateForm input[name=location]");
+        let imageField = document.querySelector("#userUpdateForm .updateImageField");
+        let recordWrapper = document.querySelector("#userUpdateForm .recordWrapper");
+
+        rankField.parentElement.classList.remove("is-empty");
+        nameField.parentElement.classList.remove("is-empty");
+        ageField.parentElement.classList.remove("is-empty");
+        locationField.parentElement.classList.remove("is-empty");
+
+        nameField.value = name;
+        rankField.value = rank;
+        ageField.value = age;
+        locationField.value = location;
+        imageField.src = profile;
+
+        $("#userUpdateForm .recordWrapper").html("");
+
+
+        for(let i=0; i<records.length; i++) {
+            let html = `
+            <hr/>
+            <div class="form-group label-floating">
+                <label class="control-label">수상연도(EX: 2019)</label>
+                <input type="text" name="year" class="form-control" value='${records[i].year}'/>
+                <span class="material-input"></span>
+            </div>
+            <div class="form-group label-floating">
+                <label class="control-label">대회이름(EX: 계룡포커대회)</label>
+                <input type="text" name="rally" class="form-control" value='${records[i].rally}'/>
+                <span class="material-input"></span>
+            </div>
+            <div class="form-group label-floating">
+                <label class="control-label">순위(EX: 1)</label>
+                <input type="text" name="record" class="form-control" value='${records[i].record}'/>
+                <span class="material-input"></span>
+            </div>
+            <div class="form-group label-floating">
+                <label class="control-label">상금(EX: 5000)</label>
+                <input type="text" name="money" class="form-control" value='${records[i].money}'/>
+                <span class="material-input"></span>
+            </div>                                    
+            `;
+
+            $("#userUpdateForm .recordWrapper").append(html);
+
+        }
+
+        document.querySelector(".userUpdateButton").value = idx;
+
+    }
+
+    let userUpdateButton = document.querySelector(".userUpdateButton");
+    userUpdateButton.addEventListener("click", async function() {
+        let formData = new FormData();
+        let userProfile = document.querySelector("#userUpdateForm input[name=profile]").files[0];
+        let userName = document.querySelector("#userUpdateForm input[name=name]").value;
+        let userRank = document.querySelector("#userUpdateForm input[name=rank]").value;
+        let userAge = document.querySelector("#userUpdateForm input[name=age]").value;
+        let userLocation = document.querySelector("#userUpdateForm input[name=location]").value;
+        let updateImageField = document.querySelector("#userUpdateForm .updateImageField").src;
+        let parseImageSrc = updateImageField.split("http://localhost:4000/")[1];
+
+        let years = Array.from(document.querySelectorAll("#userUpdateForm .recordWrapper input[name=year]"));
+        let rallys = Array.from(document.querySelectorAll("#userUpdateForm .recordWrapper input[name=rally]"));
+        let records = Array.from(document.querySelectorAll("#userUpdateForm .recordWrapper input[name=record"));
+        let moneys = Array.from(document.querySelectorAll("#userUpdateForm .recordWrapper input[name=money]"));
+        let userRecords = [];
+
+        if(!userName || !userRank || !userAge || !userLocation) {
+            alert("빈 정보를 입력해주세요.");
+            return;
+        }
+
+        for(let i=0; i<years.length; i++) {
+            if(!years[i].value || !rallys[i].value || !records[i].value || !moneys[i].value) {
+                alert("빈 정보를 입력해주세요");
+                return;
+            }
+            let userRecord = {
+                year: Number(years[i].value),
+                rally: rallys[i].value,
+                record: Number(records[i].value),
+                money: Number(moneys[i].value)
+            };
+            userRecords.push(userRecord);
+        }
+
+        if(!userProfile) {
+            userProfile = `/${parseImageSrc}`;
+        }
+
+        formData.append("idx", this.value);
+        formData.append("name", userName);
+        formData.append("rank", userRank);
+        formData.append("age", userAge);
+        formData.append("location", userLocation);
+        formData.append("profile", userProfile);
+        formData.append("records", JSON.stringify(userRecords));
+
+        let response = await fetch("http://localhost:4000/api/user?_method=PUT", {
+            method: "POST",
+            body: formData
+        });
+
+        let responseJson = await response.json();
+
+        if(responseJson.status === 200) {
+            alert("유저 업데이트가 완료 되었습니다.");
+            location.href ="/dash";
+        }
+    })
 });
