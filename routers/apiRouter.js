@@ -19,6 +19,7 @@ import {
     deleteUser,
     searchAds,
     getAdInfo,
+    login,
 } from "../controllers/apiController";
 
 const upload = multer({
@@ -47,6 +48,7 @@ apiRouter.get("/test", testApi);
 apiRouter.get("/ads/ad/:idx", getAdInfo);
 
 /* POST */
+apiRouter.post("/login", login);
 apiRouter.post("/user", upload.single("profile"), createUser);
 apiRouter.post("/links", upload.single("linkbanner"), updateBanner);
 apiRouter.post("/ads/:location", upload.single("profile"), createAds);

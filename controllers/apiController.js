@@ -2,7 +2,9 @@ import User from "../models/user";
 import Links from "../models/links";
 import Ads from "../models/ads";
 import { deleteLinkFiles } from "./useful";
-import user from "../models/user";
+import hash from "js-sha256";
+import "dotenv/config";
+import jwt from "jsonwebtoken";
 
 /* GET */
 
@@ -162,6 +164,23 @@ export const getLinks = (req, res) => {
 
 
 /* POST */
+export const login = (req, res) => {
+    const passwd = req.body.passwd;
+    const serverPasswd = hash.sha256(process.env.CRYPT_PASSWD);
+
+    if(passwd !== serverPasswd) {
+        res.json({status: 200, msg: "failed"});
+    }else {
+        let token = jwt.sign({
+            userId: "holdemAdmin",
+        }, "holdem_ranking_api_use#$*", {
+            expiresIn: '60m'
+        });
+        res.cookie("token", token);
+        res.json({status:200, msg: "success", token});
+    }
+};
+
 export const createUser = (req, res) => {
     const {rank, name, age, location, records} = req.body;
     const filename = req.file.filename;

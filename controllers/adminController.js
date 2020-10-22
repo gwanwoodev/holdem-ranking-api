@@ -1,4 +1,3 @@
-import {getLinks} from "./apiController";
 import fetch from "isomorphic-fetch";
 
 /* GET */
@@ -14,4 +13,8 @@ export const showAdsBoard = async (req, res) => {
     let ads = await fetch("https://gwgod.xyz/api/ads");
     let adsData = await ads.json();
     res.render("ads", {ads: adsData});
+}
+
+export const showLogin = async (req, res) => {
+    res.render("login");
 }
