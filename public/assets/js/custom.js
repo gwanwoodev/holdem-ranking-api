@@ -332,10 +332,10 @@ document.addEventListener("DOMContentLoaded", () => {
         let userAge = document.querySelector("#userForm input[name=age]").value;
         let userLocation = document.querySelector("#userForm input[name=location]").value;
 
-        let years = Array.from(document.querySelectorAll(".recordWrapper input[name=year]"));
-        let rallys = Array.from(document.querySelectorAll(".recordWrapper input[name=rally]"));
-        let records = Array.from(document.querySelectorAll(".recordWrapper input[name=record"));
-        let moneys = Array.from(document.querySelectorAll(".recordWrapper input[name=money]"));
+        let years = Array.from(document.querySelectorAll("#userForm .recordWrapper input[name=year]"));
+        let rallys = Array.from(document.querySelectorAll("#userForm .recordWrapper input[name=rally]"));
+        let records = Array.from(document.querySelectorAll("#userForm .recordWrapper input[name=record"));
+        let moneys = Array.from(document.querySelectorAll("#userForm .recordWrapper input[name=money]"));
         let userRecords = [];
 
         if(!userName || !userRank || !userAge || !userLocation || !userProfile) {
@@ -345,9 +345,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         for(let i=0; i<years.length; i++) {
             if(!years[i].value || !rallys[i].value || !records[i].value || !moneys[i].value) {
-                alert("빈 정보를 입력해주세요");
                 return;
             }
+            
             let userRecord = {
                 year: Number(years[i].value),
                 rally: rallys[i].value,
