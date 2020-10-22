@@ -339,6 +339,10 @@ document.addEventListener("DOMContentLoaded", () => {
         let userRecords = [];
 
         if(userName === "" || userRank === "" || userAge === "" || userLocation === ""|| userProfile === "") {
+            console.log(userName);
+            console.log(userRank);
+            console.log(userAge);
+            console.log(userLocation);
             alert("빈 정보를 입력해주세요.");
             return;
         }
