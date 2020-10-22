@@ -338,13 +338,14 @@ document.addEventListener("DOMContentLoaded", () => {
         let moneys = Array.from(document.querySelectorAll("#userForm .recordWrapper input[name=money]"));
         let userRecords = [];
 
-        if(!userName || !userRank || !userAge || !userLocation || !userProfile) {
+        if(userName === "" || userRank === "" || userAge === "" || userLocation === ""|| userProfile === "") {
             alert("빈 정보를 입력해주세요.");
             return;
         }
 
         for(let i=0; i<years.length; i++) {
             if(!years[i].value || !rallys[i].value || !records[i].value || !moneys[i].value) {
+                alert("빈정보를 입력해주세요");
                 return;
             }
             

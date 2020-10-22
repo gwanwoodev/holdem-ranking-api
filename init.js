@@ -2,7 +2,7 @@ import app from "./app";
 import mongoose from "mongoose";
 import "dotenv/config";
 
-const PORT = 4000;
+const PORT = 3000;
 const handleListening = () => console.log(`Listening on http://localhost:${PORT}`);
 
 /* Mongoose Connect */
