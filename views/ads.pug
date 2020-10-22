@@ -96,7 +96,7 @@ head
                     input.form-control(type='text' name="name")
                     span.material-input
                   .form-group.label-floating.is-empty
-                    select.selectpicker(data-style='select-with-transition' title='지역 선택' data-size='7')
+                    select.selectpicker(data-style='select-with-transition' title='지역 선택' data-size='7' name="location")
                         option(disabled='') 지역선택
                         option(value='seoul') 서울특별시
                         option(value='busan') 부산광역시
@@ -124,7 +124,7 @@ head
                     label.control-label 내용(EX: 놀고가세요~)
                     input.form-control(type='text' name="content")
                     span.material-input
-                  button.btn.btn-fill.btn-rose.userAddButton(type='button') SUBMIT
+                  button.btn.btn-fill.btn-rose.adsAddButton(type='button') SUBMIT
 
           .col-md-6
             .card

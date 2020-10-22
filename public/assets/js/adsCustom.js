@@ -173,9 +173,40 @@ document.addEventListener("DOMContentLoaded", (evt) => {
             alert("광고 업데이트가 완료 되었습니다.");
             location.href ="/dash/ads";
         }
-
-        
-
     });
 
+    let adsAddButton = document.querySelector(".adsAddButton");
+
+    adsAddButton.addEventListener("click", async (evt) => {
+        evt.preventDefault();
+        let formData = new FormData();
+        let adsProfile = document.querySelector("#adsForm input[name=profile]").files[0];
+        let adsName = document.querySelector("#adsForm input[name=name]").value;
+        let adsLoc = document.querySelector("#adsForm select[name=location]").value;
+        let adsAddr = document.querySelector("#adsForm input[name=addr]").value;
+        let adsContent = document.querySelector("#adsForm input[name=content]").value;
+
+        if(!adsName || !adsLoc || !adsAddr || !adsContent) {
+            alert("빈 정보를 입력해주세요.");
+            return;
+        }
+
+        formData.append("name", adsName);
+        formData.append("addr", adsAddr);
+        formData.append("content", adsContent);
+        formData.append("profile", adsProfile);
+
+        let response = await fetch(`http://localhost:4000/api/ads/${adsLoc}`, {
+            method: "POST",
+            body: formData
+        });
+
+        let responseJson = await response.json();
+
+        if(responseJson.status === 200) {
+            alert("광고 등록이 완료 되었습니다.");
+            location.href ="/dash/ads";
+        }
+
+    });
 });
