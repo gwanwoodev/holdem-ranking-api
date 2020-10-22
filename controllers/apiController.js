@@ -167,7 +167,7 @@ export const getLinks = (req, res) => {
 export const login = (req, res) => {
     const passwd = req.body.passwd;
     const serverPasswd = hash.sha256(process.env.CRYPT_PASSWD);
-
+    console.log(passwd);
     if(passwd !== serverPasswd) {
         res.json({status: 200, msg: "failed"});
     }else {
