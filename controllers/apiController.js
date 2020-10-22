@@ -155,7 +155,7 @@ export const createUser = (req, res) => {
         age,
         location,
         profile: filename,
-        records,
+        records: JSON.parse(records),
     }, ((err, user) => {
         if(err) return res.status(500).json({status:500, msg: "User 생성 실패"});
         res.status(200).json({status:200, msg: "User 생성 성공"});

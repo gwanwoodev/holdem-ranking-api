@@ -179,41 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* users */
-    let userAddButton = document.querySelector(".userAddButton");
     let userTableBody = document.querySelector("tbody");
-    userAddButton.addEventListener("click", (event) => {
-        let tr = document.createElement("tr");
-        let rankTd = document.createElement("td");
-        let flagTd = document.createElement("td");
-        let flagDiv = document.createElement("div");
-        let rankInput = document.createElement("input");
-        let nameTd = document.createElement("td");
-        let nameInput = document.createElement("input");
-
-        let totalMoneyTd = document.createElement("td");
-        let totalMoneyInput = document.createElement("input");
-        let saveTd = document.createElement("td");
-        let saveButton = document.createElement("button");
-
-        flagDiv.classList.add("flag");
-
-        saveButton.classList.add("btn", "btn-success", "btn-sm", "userSaveButton");
-        saveButton.innerText= "저장";
-        flagDiv.appendChild(rankInput);
-        flagTd.appendChild(flagDiv);
-        rankTd.appendChild(flagDiv);
-        nameTd.appendChild(nameInput);
-        totalMoneyTd.appendChild(totalMoneyInput);
-        saveTd.appendChild(saveButton);
-
-        tr.appendChild(flagTd);
-        tr.appendChild(rankTd);
-        tr.appendChild(nameTd);
-        tr.appendChild(totalMoneyTd);
-        tr.appendChild(saveTd);
-
-        userTableBody.appendChild(tr);
-    });
 
     let userDeleteButtons = Array.from(document.querySelectorAll(".userDeleteButton"));
     userDeleteButtons.forEach(function(item) {
@@ -238,6 +204,10 @@ document.addEventListener("DOMContentLoaded", () => {
     let userSearchButton = document.querySelector(".userSearchButton");
     userSearchButton.addEventListener("click", (evt) => {
         let userSearchInput = document.querySelector(".userSearchInput")
+        if(!userSearchInput.value) {
+            alert("이름을 입력해주세요");
+            return;
+        }
         searchUser(userSearchInput.value);
     })
 
@@ -247,9 +217,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let response = await fetch(`/api/search/${value}`);
         let responseJson = await response.json();
-
         userTableBody.remove();
+        let newTableBody = document.querySelector(".newTableBody");
+        if(newTableBody) newTableBody.remove();
         let newTable = document.createElement("tbody");
+        newTable.classList.add("newTableBody");
         customTable.appendChild(newTable);
         
         for(let i=0; i<responseJson.data.length; i++) {
@@ -300,4 +272,94 @@ document.addEventListener("DOMContentLoaded", () => {
     const numberWithCommas = (x) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
+
+    let recordButton = document.querySelector(".recordButton");
+    recordButton.addEventListener("click", (evt) => {
+        evt.preventDefault();
+        let recordWrapper = document.querySelector(".recordWrapper");
+        let html = `
+        <hr/>
+        <div class="form-group label-floating is-empty">
+            <label class="control-label">수상연도(EX: 2019)</label>
+            <input type="text" class="form-control" name="year"/>
+            <span class="material-input"></span>
+        </div>
+        <div class="form-group label-floating is-empty">
+            <label class="control-label">대회이름(EX: 계룡 포커대회)</label>
+            <input type="text" class="form-control" name="rally"/>
+            <span class="material-input"></span>
+        </div>
+        <div class="form-group label-floating is-empty">
+            <label class="control-label">순위(EX: 1)</label>
+            <input type="text" class="form-control" name="record"/>
+            <span class="material-input"></span>
+        </div>
+        <div class="form-group label-floating is-empty">
+            <label class="control-label">상금(EX: 5000)</label>
+            <input type="text" class="form-control" name="money"/>
+            <span class="material-input"></span>
+        </div>                                           
+        `;
+
+        $(".recordWrapper").append(html);
+        // recordWrapper.innerHTML = recordWrapper.innerHTML + html;
+    });
+
+    let userAddButton = document.querySelector(".userAddButton");
+
+    
+    userAddButton.addEventListener("click", async (evt) => {
+        evt.preventDefault();
+        let formData = new FormData();
+        let userProfile = document.querySelector("#userForm input[name=profile]").files[0];
+        let userName = document.querySelector("#userForm input[name=name]").value;
+        let userRank = document.querySelector("#userForm input[name=rank]").value;
+        let userAge = document.querySelector("#userForm input[name=age]").value;
+        let userLocation = document.querySelector("#userForm input[name=location]").value;
+
+        let years = Array.from(document.querySelectorAll(".recordWrapper input[name=year]"));
+        let rallys = Array.from(document.querySelectorAll(".recordWrapper input[name=rally]"));
+        let records = Array.from(document.querySelectorAll(".recordWrapper input[name=record"));
+        let moneys = Array.from(document.querySelectorAll(".recordWrapper input[name=money]"));
+        let userRecords = [];
+
+        if(!userName || !userRank || !userAge || !userLocation || !userProfile) {
+            alert("빈 정보를 입력해주세요.");
+            return;
+        }
+
+        for(let i=0; i<years.length; i++) {
+            if(!years[i].value || !rallys[i].value || !records[i].value || !moneys[i].value) {
+                alert("빈 정보를 입력해주세요");
+                return;
+            }
+            let userRecord = {
+                year: Number(years[i].value),
+                rally: rallys[i].value,
+                record: Number(records[i].value),
+                money: Number(moneys[i].value)
+            };
+            userRecords.push(userRecord);
+        }
+
+        formData.append("name", userName);
+        formData.append("rank", userRank);
+        formData.append("age", userAge);
+        formData.append("location", userLocation);
+        formData.append("profile", userProfile);
+        formData.append("records", JSON.stringify(userRecords));
+
+        let response = await fetch("http://localhost:4000/api/user", {
+            method: "POST",
+            body: formData
+        });
+
+        let responseJson = await response.json();
+
+        if(responseJson.status === 200) {
+            alert("유저 생성이 완료 되었습니다.");
+            location.href ="/dash";
+        }
+
+    });
 });

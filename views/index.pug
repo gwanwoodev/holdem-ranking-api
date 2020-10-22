@@ -86,12 +86,98 @@ head
         input(type="file"  class="file5" style="display: none;")
 
         .row
+          .col-md-6
+            .card
+              .card-header.card-header-icon(data-background-color='rose')
+                i.material-icons mail_outline
+              .card-content
+                h4.card-title 유저 추가
+                form(method='POST' action='http://localhost:4000/api/user' id="userForm" enctype="multipart/form-data")
+                  .form-group.label-floating.is-empty
+                    legend Avatar
+                    .fileinput.fileinput-new.text-center(data-provides='fileinput')
+                      .fileinput-new.thumbnail.img-circle
+                        img(src='../../assets/img/placeholder.jpg' alt='...')
+                      .fileinput-preview.fileinput-exists.thumbnail.img-circle
+                      div
+                        span.btn.btn-round.btn-rose.btn-file
+                          span.fileinput-new Add Photo
+                          span.fileinput-exists Change
+                          input(type='file' name='profile')
+                        br
+                        a.btn.btn-danger.btn-round.fileinput-exists(href='#pablo' data-dismiss='fileinput')
+                          i.fa.fa-times
+                          |  Remove                
+                  .form-group.label-floating.is-empty
+                    label.control-label 이름(EX: 홍길동)
+                    input.form-control(type='text' name="name")
+                    span.material-input
+                  .form-group.label-floating.is-empty
+                    label.control-label 대한민국 랭킹 순위(EX: 1)
+                    input.form-control(type='text' name="rank")
+                    span.material-input
+                  .form-group.label-floating.is-empty
+                    label.control-label 나이(EX: 20)
+                    input.form-control(type='text' name="age")
+                    span.material-input
+                  .form-group.label-floating.is-empty
+                    label.control-label 지역(EX: 서울 도봉구)
+                    input.form-control(type='text' name="location")
+                    span.material-input
+                  legend 성적 <button class="btn btn-fill btn-rose ml-auto recordButton">추가</button>
+                  .recordWrapper
+                    .form-group.label-floating.is-empty                    
+                      label.control-label 수상연도(EX: 2019)
+                      input.form-control(type='text' name="year")
+                      span.material-input
+                    .form-group.label-floating.is-empty                    
+                      label.control-label 대회이름(EX: 계룡 포커대회)
+                      input.form-control(type='text' name="rally")
+                      span.material-input     
+                    .form-group.label-floating.is-empty                    
+                      label.control-label 순위(EX: 1)
+                      input.form-control(type='text' name="record")
+                      span.material-input      
+                    .form-group.label-floating.is-empty                    
+                      label.control-label 상금(EX: 5000)
+                      input.form-control(type='text' name="money")
+                      span.material-input                                   
+
+
+                  button.btn.btn-fill.btn-rose.userAddButton(type='button') SUBMIT
+
+          .col-md-6
+            .card
+              .card-header.card-header-icon(data-background-color='rose')
+                i.material-icons mail_outline
+              .card-content
+                h4.card-title 유저 수정
+                form(method='#' action='#')
+                  .form-group.label-floating.is-empty
+                    label.control-label Email address
+                    input.form-control(type='email')
+                    span.material-input
+                  .form-group.label-floating.is-empty
+                    label.control-label Password
+                    input.form-control(type='password')
+                    span.material-input
+                  .checkbox
+                    label
+                      input(type='checkbox' name='terms')
+                      span.checkbox-material
+                        span.check
+                      |  Subscribe to newsletter
+                  button.btn.btn-fill.btn-rose(type='submit') Submit
+
+        
+
+        .row
           .col-md-12
             .card
               .card-header.card-header-icon(data-background-color='green')
                 i.material-icons &#xE894;
               .card-content
-                h4.card-title.nanumsquare 선수 추가
+                h4.card-title.nanumsquare 유저
                 - function numberWithCommas(x) {
                 -   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 - }
@@ -100,7 +186,6 @@ head
                     div.searchBox
                       input(type="text" class="form-control userSearchInput" placeholder="이름")
                       button.btn.btn-primary.btn-sm.ml-auto.userSearchButton 검색
-                      button.btn.btn-primary.btn-sm.ml-auto.userAddButton 추가
                 .row
                   .col-md-12
                     .table-responsive.table-sales
