@@ -24,8 +24,14 @@
 
 .custom-flex {
   display: flex;
+  justify-content: flex-end;
 }
 
 .ml-auto {
   margin-left: auto;
+}
+
+.searchBox {
+  display: flex;
+  justify-content: flex-end;
 }

@@ -64,6 +64,16 @@ export const searchUser = (req, res) => {
     const {name} = req.params;
     User.find({name: name}, ((err, users) => {
         if(err) return res.status(500).json({status:500, msg: "조회 실패"});
+        let sum = 0;
+
+        users.forEach((items, index) => {
+            let sum = 0;
+            items.records.forEach(item => {
+                sum = sum + item.money;
+            })
+            users[index] = users[index].toObject();
+            users[index].totalMoney = sum;
+        })
         res.status(200).json({status:200, msg: "조회 성공", data: users});
     }));
 }
@@ -246,5 +256,14 @@ export const deleteAds = (req, res) => {
     Ads.deleteOne({idx: idx}, ((err, ads) => {
         if(err) return res.status(500).json({status:500, msg: "Ads 삭제 실패"});
         res.status(200).json({status:200, msg: "Ads 삭제 성공"});
+    }));
+}
+
+export const deleteUser = (req, res) => {
+    const idx = req.params.idx;
+    User.deleteOne({idx: idx}, ((err, user) => {
+        
+        if(err) return res.status(500).json({status:500, msg: "User 삭제 실패"});
+        res.status(200).json({status:200, msg: "User 삭제 성공"});
     }));
 }

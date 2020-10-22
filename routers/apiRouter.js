@@ -16,7 +16,8 @@ import {
     getAd,
     updateBanner,
     getLinks,
-    holdemInit
+    holdemInit,
+    deleteUser,
 } from "../controllers/apiController";
 
 const upload = multer({
@@ -52,6 +53,7 @@ apiRouter.put("/user", upload.single("profile"), updateUser);
 apiRouter.put("/ads/:location?", upload.single("profile"), updateAds);
 
 /* DELETE */
+apiRouter.delete("/user/:idx", deleteUser);
 apiRouter.delete("/ads/:idx", deleteAds);
 
 export default apiRouter;

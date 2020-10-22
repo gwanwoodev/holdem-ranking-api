@@ -213,8 +213,91 @@ document.addEventListener("DOMContentLoaded", () => {
         tr.appendChild(saveTd);
 
         userTableBody.appendChild(tr);
+    });
 
+    let userDeleteButtons = Array.from(document.querySelectorAll(".userDeleteButton"));
+    userDeleteButtons.forEach(function(item) {
+        item.addEventListener("click", async function() {
+
+            if(confirm("삭제하시겠습니까?")) {
+                deleteUser(item.value);
+                item.parentElement.parentElement.remove();
+            }
+        })
+    })
+
+    const deleteUser = async (idx) => {
+        let formData = new FormData();
+        formData.append("idx", idx);
+        let response = await fetch(`/api/user/${idx}?_method=DELETE`, {
+            method: "POST",
+            body: formData
+        });
+    }
+
+    let userSearchButton = document.querySelector(".userSearchButton");
+    userSearchButton.addEventListener("click", (evt) => {
+        let userSearchInput = document.querySelector(".userSearchInput")
+        searchUser(userSearchInput.value);
+    })
+
+    let customTable = document.querySelector(".customTable");
+
+    const searchUser = async (value) => {
+
+        let response = await fetch(`/api/search/${value}`);
+        let responseJson = await response.json();
+
+        userTableBody.remove();
+        let newTable = document.createElement("tbody");
+        customTable.appendChild(newTable);
+        
+        for(let i=0; i<responseJson.data.length; i++) {
+            insertNewUser(responseJson.data[i].idx, responseJson.data[i].rank, responseJson.data[i].name, responseJson.data[i].age, responseJson.data[i].totalMoney, newTable);
+        }
 
         
-    });
+    }
+
+    const insertNewUser = (idx, rank, name, age, totalMoney, newTable) => {
+        let tr = document.createElement("tr");
+        let rankTd = document.createElement("td");
+        let nameTd = document.createElement("td");
+        let ageTd = document.createElement("td");
+        let moneyTd = document.createElement("td");
+        let updateBtnTd = document.createElement("td");
+        let updateButton = document.createElement("button");
+        let deleteBtnTd = document.createElement("td");
+        let deleteButton = document.createElement("button");
+
+        updateButton.classList.add("btn", "btn-primary", "btn-sm", "userUpdateButton");
+        deleteButton.classList.add("btn", "btn-primary", "btn-sm", "userDeleteButton");
+
+        updateButton.value = idx;
+        deleteButton.value = idx;
+        updateButton.innerText= "수정";
+        deleteButton.innerText = "삭제";
+
+        updateBtnTd.appendChild(updateButton);
+        deleteBtnTd.appendChild(deleteButton);
+
+        rankTd.innerText = `${rank}st`;
+        nameTd.innerText = name;
+        ageTd.innerText = age;
+        moneyTd.innerText = `${numberWithCommas(totalMoney)} KRW`;
+
+        tr.appendChild(rankTd);
+        tr.appendChild(nameTd);
+        tr.appendChild(ageTd);
+        tr.appendChild(moneyTd);
+        tr.appendChild(updateBtnTd);
+        tr.appendChild(deleteBtnTd);
+
+        newTable.appendChild(tr);
+        
+    }
+
+    const numberWithCommas = (x) => {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 });

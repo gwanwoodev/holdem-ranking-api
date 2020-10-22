@@ -1,3 +1,4 @@
+
 doctype html
 head
   meta(charset='utf-8')
@@ -96,20 +97,30 @@ head
                 - }
                 .row 
                   .col-md-12.custom-flex
-                    button.btn.btn-primary.btn-sm.ml-auto.userAddButton 추가
+                    div.searchBox
+                      input(type="text" class="form-control userSearchInput" placeholder="이름")
+                      button.btn.btn-primary.btn-sm.ml-auto.userSearchButton 검색
+                      button.btn.btn-primary.btn-sm.ml-auto.userAddButton 추가
                 .row
                   .col-md-12
                     .table-responsive.table-sales
-                      table.table
+                      table.table.customTable
+                        thead.text-primary
+                          th 랭킹
+                          th 이름
+                          th 나이
+                          th 총 누적 상금
+                          th 수정
+                          th 삭제
                         -for(var i=0; i<users.data.length; i++)
                           tr
-                            td
-                              .flag
-                                p #{users.data[i].rank}st
+                            td #{users.data[i].rank}st
                             td #{users.data[i].name}
-                            td.text-right #{numberWithCommas(users.data[i].totalMoney)} KRW
-                            td.text-right
+                            td #{users.data[i].age}
+                            td #{numberWithCommas(users.data[i].totalMoney)} KRW
+                            td
                              button.btn.btn-primary.btn-sm.userUpdateButton(value ="" + users.data[i].idx) 수정
+                            td
                              button.btn.btn-primary.btn-sm.userDeleteButton(value ="" + users.data[i].idx) 삭제
 
 
