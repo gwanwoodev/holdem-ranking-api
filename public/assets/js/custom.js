@@ -250,6 +250,21 @@ document.addEventListener("DOMContentLoaded", () => {
         updateButton.innerText= "수정";
         deleteButton.innerText = "삭제";
 
+        deleteButton.addEventListener("click", function(evt) {
+            if(confirm("삭제하시겠습니까?")) {
+                deleteUser(this.value);
+                this.parentElement.parentElement.remove();
+            }
+        })
+
+        updateButton.addEventListener("click", async function() {
+            let res = await fetch(`http://localhost:4000/api/user/${this.value}`);
+            let json = await res.json();
+            let data = json.data;
+
+            importUpdateForms(data.idx, data.name, data.rank, data.age, data.location, data.profile, data.records);            
+        });
+
         updateBtnTd.appendChild(updateButton);
         deleteBtnTd.appendChild(deleteButton);
 
