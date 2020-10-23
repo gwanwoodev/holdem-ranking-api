@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", (evt) => {
     loginButton.addEventListener("click", async (evt) => {
         evt.preventDefault();
 
-        let response = await fetch("https://gwgod.xyz/api/login", {
+        let response = await fetch("https://holdemranking.com/api/login", {
             headers: {"Content-Type": "application/json"},
             method: "POST",
             body: JSON.stringify({passwd: sha256(passwdInput.value)})

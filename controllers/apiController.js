@@ -219,7 +219,7 @@ export const getLinks = (req, res) => {
 /* POST */
 export const login = (req, res) => {
     const passwd = req.body.passwd;
-    const serverPasswd = hash.sha256(process.env.CRYPT_PASSWD);
+    const serverPasswd = hash.sha256("holdemranking#$*");
     if(passwd !== serverPasswd) {
         res.json({status: 200, msg: "failed"});
     }else {
