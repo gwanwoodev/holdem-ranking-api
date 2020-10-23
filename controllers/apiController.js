@@ -76,10 +76,10 @@ export const holdemInit = async (req, res) => {
             },
         },
         {
-            $skip: startAt
+            $skip: Number(startAt)
         },
         {
-            $limit: endAt
+            $limit: Number(endAt)
         }
     ]);
 
@@ -153,10 +153,10 @@ export const getUsers = async (req, res) => {
             },
         },
         {
-            $skip: startAt
+            $skip: Number(startAt)
         },
         {
-            $limit: endAt
+            $limit: Number(endAt)
         }
     ]);
 
