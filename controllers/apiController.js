@@ -5,24 +5,46 @@ import { deleteLinkFiles } from "./useful";
 import hash from "js-sha256";
 import "dotenv/config";
 import jwt from "jsonwebtoken";
+import cookieParser from "cookie-parser";
 
 /* GET */
 
 export const testApi = async (req, res) => {
-    /*const links = await Links.find({},((err, links) => {
-        return links;
-    }));
 
-    let temp = links.map(item => {
-        return item.imagePath;
-    })
-    res.send(temp);*/
 
-    const user = await User.find({}, ((err, user) => {
-        return user;
-    })).skip(0).limit(30);
+    const users = await User.aggregate([
+        {
+            $match: {idx: 25}
+        },
+        {
+            $unwind: "$records"
+        },
+        {
+            $group: {
+                _id: "$_id",
+                name: {$first: "$name"},
+                age: {$first: "$age"},
+                location: {$first: "$location"},
+                profile: {$first: "$profile"},
+                idx: {$first: "$idx"},
+                totalMoney: {$sum: "$records.money"},
+            },
+        },
+        {
+            $sort: {
+                "totalMoney": -1
+            },
+        },
+        {
+            $skip: 0
+        },
+        {
+            $limit: 30
+        }
+    ]);
 
-    res.send(user);
+    res.send(users);
+
 }
 export const holdemInit = async (req, res) => {
     let {startAt, endAt} = req.query;
@@ -33,18 +55,33 @@ export const holdemInit = async (req, res) => {
         return links;
     }));
 
-    const users = await User.find({}, ((err,users) => {
-        return users;
-    })).skip(Number(startAt)).limit(Number(endAt));
-
-    users.forEach((items, index) => {
-        let sum = 0;
-        items.records.forEach(item => {
-            sum = sum + item.money;
-        })
-        users[index] = users[index].toObject();
-        users[index].totalMoney = sum;
-    });
+    const users = await User.aggregate([
+        {
+            $unwind: "$records"
+        },
+        {
+            $group: {
+                _id: "$_id",
+                name: {$first: "$name"},
+                age: {$first: "$age"},
+                location: {$first: "$location"},
+                profile: {$first: "$profile"},
+                idx: {$first: "$idx"},
+                totalMoney: {$sum: "$records.money"},
+            },
+        },
+        {
+            $sort: {
+                "totalMoney": -1
+            },
+        },
+        {
+            $skip: startAt
+        },
+        {
+            $limit: endAt
+        }
+    ]);
 
 
     const ads = await Ads.find({}, ((err, ads) => {
@@ -94,20 +131,36 @@ export const getUsers = async (req, res) => {
     if(startAt === undefined) startAt = 0;
     if(endAt === undefined) endAt = 30;
 
-    User.find({},((err,users) => {
-        if(err) return res.status(500).json({status:500, msg: "조회 실패"});
+    
+    const users = await User.aggregate([
+        {
+            $unwind: "$records"
+        },
+        {
+            $group: {
+                _id: "$_id",
+                name: {$first: "$name"},
+                age: {$first: "$age"},
+                location: {$first: "$location"},
+                profile: {$first: "$profile"},
+                idx: {$first: "$idx"},
+                totalMoney: {$sum: "$records.money"},
+            },
+        },
+        {
+            $sort: {
+                "totalMoney": -1
+            },
+        },
+        {
+            $skip: startAt
+        },
+        {
+            $limit: endAt
+        }
+    ]);
 
-        users.forEach((items, index) => {
-            let sum = 0;
-            items.records.forEach(item => {
-                sum = sum + item.money;
-            })
-            users[index] = users[index].toObject();
-            users[index].totalMoney = sum;
-        })
-
-        res.status(200).json({status:200, msg: "조회 성공", data: users});
-    })).skip(Number(startAt)).limit(Number(endAt));
+    res.status(200).json({status:200, msg: "조회 성공", data: users});
 }
 
 export const getUser = async (req, res) => {
@@ -181,11 +234,10 @@ export const login = (req, res) => {
 };
 
 export const createUser = (req, res) => {
-    const {rank, name, age, location, records} = req.body;
+    const { name, age, location, records} = req.body;
     const filename = req.file.filename;
 
     User.create({
-        rank,
         name,
         age,
         location,

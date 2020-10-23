@@ -8,7 +8,6 @@ autoIncrement.initialize(mongoose.connection);
 
 const userSchema = new Schema({
     idx: Number,
-    rank: Number,
     name: String,
     age: Number,
     location: String,
