@@ -96,7 +96,7 @@ head
                 i.material-icons mail_outline
               .card-content
                 h4.card-title 유저 추가
-                form(method='POST' action='https://gwgod.xyz/api/user' id="userForm" enctype="multipart/form-data")
+                form(method='POST' action='http://localhost:3000/api/user' id="userForm" enctype="multipart/form-data")
                   .form-group.label-floating.is-empty
                     legend Avatar
                     .fileinput.fileinput-new.text-center(data-provides='fileinput')
@@ -115,10 +115,6 @@ head
                   .form-group.label-floating.is-empty
                     label.control-label 이름(EX: 홍길동)
                     input.form-control(type='text' name="name")
-                    span.material-input
-                  .form-group.label-floating.is-empty
-                    label.control-label 대한민국 랭킹 순위(EX: 1)
-                    input.form-control(type='text' name="rank")
                     span.material-input
                   .form-group.label-floating.is-empty
                     label.control-label 나이(EX: 20)
@@ -156,7 +152,7 @@ head
                 i.material-icons mail_outline
               .card-content
                 h4.card-title 유저 수정
-                form(method='POST' action='https://gwgod.xyz/api/user?_method=PUT' id="userUpdateForm" enctype="multipart/form-data")
+                form(method='POST' action='http://localhost:3000/api/user?_method=PUT' id="userUpdateForm" enctype="multipart/form-data")
                   .form-group.label-floating.is-empty
                     legend Avatar
                     .fileinput.fileinput-new.text-center(data-provides='fileinput')
@@ -177,10 +173,6 @@ head
                     input.form-control(type='text' name="name")
                     span.material-input
                   .form-group.label-floating.is-empty
-                    label.control-label 대한민국 랭킹 순위(EX: 1)
-                    input.form-control(type='text' name="rank")
-                    span.material-input
-                  .form-group.label-floating.is-empty
                     label.control-label 나이(EX: 20)
                     input.form-control(type='text' name="age")
                     span.material-input
@@ -188,8 +180,8 @@ head
                     label.control-label 지역(EX: 서울 도봉구)
                     input.form-control(type='text' name="location")
                     span.material-input
-                  legend 성적 <button class="btn btn-fill btn-rose ml-auto recordButton">추가</button>
-                  .recordWrapper
+                  legend 성적 <button class="btn btn-fill btn-rose ml-auto recordButton2">추가</button>
+                  .recordWrapper2
 
                   button.btn.btn-fill.btn-rose.userUpdateButton(type='button') SUBMIT
 
@@ -223,7 +215,7 @@ head
                           th 삭제
                         -for(var i=0; i<users.data.length; i++)
                           tr
-                            td #{users.data[i].rank}st
+                            td #{i+1}st
                             td #{users.data[i].name}
                             td #{users.data[i].age}
                             td #{numberWithCommas(users.data[i].totalMoney)} KRW

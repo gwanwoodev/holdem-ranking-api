@@ -225,7 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
         customTable.appendChild(newTable);
         
         for(let i=0; i<responseJson.data.length; i++) {
-            insertNewUser(responseJson.data[i].idx, responseJson.data[i].rank, responseJson.data[i].name, responseJson.data[i].age, responseJson.data[i].totalMoney, newTable);
+            insertNewUser(responseJson.data[i].idx, "검색된유저", responseJson.data[i].name, responseJson.data[i].age, responseJson.data[i].totalMoney, newTable);
         }
 
         
@@ -257,19 +257,19 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         })
 
-        updateButton.addEventListener("click", async function() {
-            let res = await fetch(`https://gwgod.xyz/api/user/${this.value}`);
+        updateButton.addEventListener("click", async function(evt) {
+            let res = await fetch(`http://localhost:3000/api/user/${this.value}`);
             let json = await res.json();
             let data = json.data;
 
-            importUpdateForms(data.idx, data.name, data.rank, data.age, data.location, data.profile, data.records);            
+            importUpdateForms(data.idx, data.name, data.age, data.location, data.profile, data.records);            
         });
 
         updateBtnTd.appendChild(updateButton);
         deleteBtnTd.appendChild(deleteButton);
 
-        rankTd.innerText = `${rank}st`;
         nameTd.innerText = name;
+        rankTd.innerText = rank;
         ageTd.innerText = age;
         moneyTd.innerText = `${numberWithCommas(totalMoney)} KRW`;
 
@@ -320,6 +320,38 @@ document.addEventListener("DOMContentLoaded", () => {
         // recordWrapper.innerHTML = recordWrapper.innerHTML + html;
     });
 
+    let recordButton2 = document.querySelector(".recordButton2");
+    recordButton2.addEventListener("click", (evt) => {
+        evt.preventDefault();
+        let recordWrapper = document.querySelector(".recordWrapper2");
+        let html = `
+        <hr/>
+        <div class="form-group label-floating is-empty">
+            <label class="control-label">수상연도(EX: 2019)</label>
+            <input type="text" class="form-control" name="year"/>
+            <span class="material-input"></span>
+        </div>
+        <div class="form-group label-floating is-empty">
+            <label class="control-label">대회이름(EX: 계룡 포커대회)</label>
+            <input type="text" class="form-control" name="rally"/>
+            <span class="material-input"></span>
+        </div>
+        <div class="form-group label-floating is-empty">
+            <label class="control-label">순위(EX: 1)</label>
+            <input type="text" class="form-control" name="record"/>
+            <span class="material-input"></span>
+        </div>
+        <div class="form-group label-floating is-empty">
+            <label class="control-label">상금(EX: 5000)</label>
+            <input type="text" class="form-control" name="money"/>
+            <span class="material-input"></span>
+        </div>                                           
+        `;
+
+        $(".recordWrapper2").append(html);
+        // recordWrapper.innerHTML = recordWrapper.innerHTML + html;
+    });
+
     let userAddButton = document.querySelector(".userAddButton");
 
     
@@ -328,7 +360,6 @@ document.addEventListener("DOMContentLoaded", () => {
         let formData = new FormData();
         let userProfile = document.querySelector("#userForm input[name=profile]").files[0];
         let userName = document.querySelector("#userForm input[name=name]").value;
-        let userRank = document.querySelector("#userForm input[name=rank]").value;
         let userAge = document.querySelector("#userForm input[name=age]").value;
         let userLocation = document.querySelector("#userForm input[name=location]").value;
 
@@ -338,11 +369,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let moneys = Array.from(document.querySelectorAll("#userForm .recordWrapper input[name=money]"));
         let userRecords = [];
 
-        if(userName === "" || userRank === "" || userAge === "" || userLocation === ""|| userProfile === "") {
-            console.log(userName);
-            console.log(userRank);
-            console.log(userAge);
-            console.log(userLocation);
+        if(userName === "" || userAge === "" || userLocation === ""|| userProfile === "") {
             alert("빈 정보를 입력해주세요.");
             return;
         }
@@ -363,13 +390,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         formData.append("name", userName);
-        formData.append("rank", userRank);
         formData.append("age", userAge);
         formData.append("location", userLocation);
         formData.append("profile", userProfile);
         formData.append("records", JSON.stringify(userRecords));
 
-        let response = await fetch("https://gwgod.xyz/api/user", {
+        let response = await fetch("http://localhost:3000/api/user", {
             method: "POST",
             body: formData
         });
@@ -387,34 +413,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
     for(let i=0; i<userImportButtons.length; i++) {
         userImportButtons[i].addEventListener("click", async function() {
-            let res = await fetch(`https://gwgod.xyz/api/user/${this.value}`);
+            let res = await fetch(`http://localhost:3000/api/user/${this.value}`);
             let json = await res.json();
             let data = json.data;
 
-            importUpdateForms(data.idx, data.name, data.rank, data.age, data.location, data.profile, data.records);
+            importUpdateForms(data.idx, data.name, data.age, data.location, data.profile, data.records);
         });
     }
 
-    const importUpdateForms = (idx, name, rank, age, location, profile, records) => {
+    const importUpdateForms = (idx, name,  age, location, profile, records) => {
         let nameField = document.querySelector("#userUpdateForm input[name=name]");
-        let rankField = document.querySelector("#userUpdateForm input[name=rank]");
         let ageField = document.querySelector("#userUpdateForm input[name=age]");
         let locationField = document.querySelector("#userUpdateForm input[name=location]");
         let imageField = document.querySelector("#userUpdateForm .updateImageField");
-        let recordWrapper = document.querySelector("#userUpdateForm .recordWrapper");
+        let recordWrapper = document.querySelector("#userUpdateForm .recordWrapper2");
 
-        rankField.parentElement.classList.remove("is-empty");
         nameField.parentElement.classList.remove("is-empty");
         ageField.parentElement.classList.remove("is-empty");
         locationField.parentElement.classList.remove("is-empty");
 
         nameField.value = name;
-        rankField.value = rank;
         ageField.value = age;
         locationField.value = location;
         imageField.src = profile;
 
-        $("#userUpdateForm .recordWrapper").html("");
+        $("#userUpdateForm .recordWrapper2").html("");
 
 
         for(let i=0; i<records.length; i++) {
@@ -442,7 +465,7 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>                                    
             `;
 
-            $("#userUpdateForm .recordWrapper").append(html);
+            $("#userUpdateForm .recordWrapper2").append(html);
 
         }
 
@@ -455,11 +478,10 @@ document.addEventListener("DOMContentLoaded", () => {
         let formData = new FormData();
         let userProfile = document.querySelector("#userUpdateForm input[name=profile]").files[0];
         let userName = document.querySelector("#userUpdateForm input[name=name]").value;
-        let userRank = document.querySelector("#userUpdateForm input[name=rank]").value;
         let userAge = document.querySelector("#userUpdateForm input[name=age]").value;
         let userLocation = document.querySelector("#userUpdateForm input[name=location]").value;
         let updateImageField = document.querySelector("#userUpdateForm .updateImageField").src;
-        let parseImageSrc = updateImageField.split("https://gwgod.xyz/")[1];
+        let parseImageSrc = updateImageField.split("http://localhost:3000/")[1];
 
         let years = Array.from(document.querySelectorAll("#userUpdateForm .recordWrapper input[name=year]"));
         let rallys = Array.from(document.querySelectorAll("#userUpdateForm .recordWrapper input[name=rally]"));
@@ -467,7 +489,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let moneys = Array.from(document.querySelectorAll("#userUpdateForm .recordWrapper input[name=money]"));
         let userRecords = [];
 
-        if(!userName || !userRank || !userAge || !userLocation) {
+        if(!userName || !userAge || !userLocation) {
             alert("빈 정보를 입력해주세요.");
             return;
         }
@@ -492,13 +514,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         formData.append("idx", this.value);
         formData.append("name", userName);
-        formData.append("rank", userRank);
         formData.append("age", userAge);
         formData.append("location", userLocation);
         formData.append("profile", userProfile);
         formData.append("records", JSON.stringify(userRecords));
 
-        let response = await fetch("https://gwgod.xyz/api/user?_method=PUT", {
+        let response = await fetch("http://localhost:3000/api/user?_method=PUT", {
             method: "POST",
             body: formData
         });
