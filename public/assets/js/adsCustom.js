@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", (evt) => {
         });
 
         updateButton.addEventListener("click", async function() {
-            let res = await fetch(`http://localhost:3000/api/ads/ad/${this.value}`);
+            let res = await fetch(`https://gwgod.xyz/api/ads/ad/${this.value}`);
             let json = await res.json();
             let data = json.data;
             importUpdateForms(data.idx, data.name, data.location, data.addr, data.content, data.profile);
@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", (evt) => {
     let adsImportButtons = Array.from(document.querySelectorAll(".adsImportButton"));
     for(let i=0; i<adsImportButtons.length; i++) {
         adsImportButtons[i].addEventListener("click", async function() {
-            let res = await fetch(`http://localhost:3000/api/ads/ad/${this.value}`);
+            let res = await fetch(`https://gwgod.xyz/api/ads/ad/${this.value}`);
             let json = await res.json();
             let data = json.data;
 
@@ -144,7 +144,7 @@ document.addEventListener("DOMContentLoaded", (evt) => {
         let locField = document.querySelector("#adsUpdateForm select[name=location]").value;
         let addrField = document.querySelector("#adsUpdateForm input[name=addr]").value;
         let contentField = document.querySelector("#adsUpdateForm input[name=content]").value;
-        let parseImageSrc = imageField.split("http://localhost:3000/")[1];
+        let parseImageSrc = imageField.split("https://gwgod.xyz/")[1];
 
         if(!nameField || !locField || !addrField || !contentField || !locField) {
             alert("빈 정보를 입력해주세요.");
@@ -162,7 +162,7 @@ document.addEventListener("DOMContentLoaded", (evt) => {
         formData.append("addr", addrField);
         formData.append("content", contentField);
 
-        let response = await fetch(`http://localhost:3000/api/ads/${locField}?_method=PUT`, {
+        let response = await fetch(`https://gwgod.xyz/api/ads/${locField}?_method=PUT`, {
             method: "POST",
             body: formData
         });
@@ -196,7 +196,7 @@ document.addEventListener("DOMContentLoaded", (evt) => {
         formData.append("content", adsContent);
         formData.append("profile", adsProfile);
 
-        let response = await fetch(`http://localhost:3000/api/ads/${adsLoc}`, {
+        let response = await fetch(`https://gwgod.xyz/api/ads/${adsLoc}`, {
             method: "POST",
             body: formData
         });
